@@ -1,0 +1,1500 @@
+## KICE시험준비 시스템&솔루션개발(Java)
+
+![image-20250714132454143](C:\Users\kirob\Downloads\image-20250714132454143.png)
+
+> [!NOTE]
+>
+> ```
+> 학습 가이드 실습환경: 응시 환경에서 HTTP 통신 시나리오가 활용되는 경우 아래 Library 를 포함하여 제공할 예정이며 그 외 Library를 선택하여 다운로드하여 사용도 가능합니다.
+> - Http Server : Jetty 9 Embedded
+> - Http Client : Jetty 9 HttpClient
+> - Json : Google Gson 2.10.1
+> ```
+
+
+
+## 준비사항
+
+### 시험 환경
+
+- 환경 : VDI(원격데스크탑)
+
+- 언어 : Java 17
+
+- 개발도구 : Eclipse
+
+> [!CAUTION]
+>
+> Eclipse 에서 제공하는 Content Assist 기능이 비활성화되어 있다.
+>
+> Content Assist 기능 활성화 방법
+>
+> 1. **설정 창 열기**
+>    - 상단 메뉴에서 **Window → Preferences**를 클릭
+> 2. **Content Assist 메뉴 이동**
+>    - 왼쪽 트리에서 **Java → Editor → Content Assist**를 선택.
+> 3. **자동 활성화(Auto Activation) 설정**
+>    - 우측에서 **Enable auto activation** 체크박스를 선택.
+
+
+
+### 전체 문항 구조 
+
+- **총 3문항**으로 구성, 3시간 내 소스코드 개발 및 제출 필요
+- **문항 간 연계**: 1번 → 2번 → 3번 순서로 점진적 개선, 선행 문항이 후속 문항의 기반이 됨
+- **실행 환경**
+  - 각 문항별 Java 프로젝트가 사전에 생성되어 있음
+  - 1, 2번: 콘솔 프로그램(단독 실행, 종료 없음)
+  - 3번: HTTP 서버 형태(API 호출, 실시간 서비스)
+  
+
+
+
+### 각 문항별 흐름(Pilot 기준)
+
+#### 문항 1: 문장 토큰화 및 워드임베딩
+
+- **기능**
+  - 콘솔로 문장 입력 → 공백 기준 단어 토큰화
+  - 각 단어를 소문자로 변환 후, 단어 사전(DICTIONARY.TXT)에서 임베딩 벡터(정수 3개)로 변환
+- **입력/출력**
+  - 입력: 임의의 영어 문장(대소문자 혼용)
+  - 출력: 각 단어의 임베딩 벡터를 공백으로 구분하여 한 줄로 출력
+- **특이사항**
+  - 프로그램 종료 없음, 계속 입력 및 출력 반복
+  - 단어 사전 파일의 내용 하드코딩 금지, 반드시 파일 참조
+  - 상대경로 사용 필수
+
+#### 문항 2: 불용어(Stopword) 제거 추가
+
+- **기능**
+  - 문항 1의 전처리 과정에 **불용어 제거** 추가
+  - 불용어 데이터(STOPWORD.TXT)에서 임베딩 벡터가 일치하는 단어는 최종 출력에서 제외
+- **입력/출력**
+  - 입력: 문항 1과 동일
+  - 출력: 불용어를 제거한 단어들의 임베딩 벡터만 공백으로 구분해 출력
+- **특이사항**
+  - 불용어 데이터 역시 파일에서 읽어야 함
+  - 프로그램 종료 없음, 계속 입력 및 출력 반복
+
+#### 문항 3: AI 서비스 플랫폼(HTTP 서버)
+
+- **기능**
+  - HTTP POST 요청을 받아, 지정된 AI 모델로 문장 분류 결과를 반환
+  - 요청: 모델명, 분류할 문장 리스트
+  - 처리:
+    - 각 문장에 대해 전처리(토큰화, 임베딩, 불용어 제거)
+    - 전처리 결과를 AI 모델 서버에 POST, 분류코드 수신
+    - 분류코드를 분류결과(예: positive/negative 등)로 변환
+  - 응답: 분류결과 리스트를 JSON으로 반환
+- **입력/출력**
+  - 입력: HTTP POST (JSON 형식)
+  - 출력: HTTP Response (JSON 형식)
+- **특이사항**
+  - 모델 목록, 분류코드-결과 매핑 등은 MODELS.JSON 파일에서 읽어야 함
+  - 서버는 종료 없이 실시간 동작
+  - 상대경로 사용 필수
+
+#### 입력/출력 조건 요약
+
+| 문항 | 입력 방식        | 출력 방식                  | 종료 조건 |
+| :--- | :--------------- | :------------------------- | :-------- |
+| 1    | 콘솔 문장 입력   | 임베딩 벡터(공백 구분)     | 종료 없음 |
+| 2    | 콘솔 문장 입력   | 불용어 제거 후 임베딩 벡터 | 종료 없음 |
+| 3    | HTTP POST (JSON) | HTTP Response (JSON)       | 종료 없음 |
+
+
+
+#### 검증 및 평가 방식
+
+- **1, 2번**: 콘솔 입/출력 결과를 샘플 결과 파일(CMP_CONSOLE.TXT)과 비교
+
+  - 실행방법
+
+    ```sh
+    javac -cp ".;lib/*" -d . src/Exam.java & java -cp ".;lib/*" Exam
+    ```
+
+    
+
+- **3번**: MOCK.EXE 프로그램을 통해 API 테스트 시나리오 자동 실행, 모든 시나리오 통과 시 "테스트에 성공했습니다!" 메시지 출력
+- **부분점수 없음**: 한 단계라도 오류 발생 시 후속 문항 전체 오류 처리
+- **전체 소스크드 압축해서 제출**
+
+
+
+#### 정책 및 참고 데이터 활용
+
+- **정책/참고 데이터 파일**
+  - 프로젝트 내 파일형태로 제공
+  - DICTIONARY.TXT: 단어-임베딩 벡터 매핑
+  - STOPWORD.TXT: 불용어 임베딩 벡터 목록
+  - MODELS.JSON: AI 모델 정보, 분류코드-분류결과 매핑, 모델별 API URL
+  
+- **파일 내용 하드코딩 금지**, 반드시 파일 입출력 코드 구현
+- **모든 경로는 상대경로**로 처리
+
+
+
+### 전체 시스템 흐름
+
+```mermaid
+flowchart TD
+    A["콘솔/HTTP 입력"] --> B["문장 토큰화"]
+    B --> C["소문자 변환"]
+    C --> D["워드임베딩(DICTIONARY.TXT 참조, 1번)"]
+    D --> E["불용어 제거(STOPWORD.TXT, 2번)"]
+    E --> F["분류코드 → AI 모델 API 호출 분류결과 변환 (3번)"]
+ 
+```
+
+
+
+### 주의사항
+
+실행 결과로 평가하고 부분점수는 없으므로 아래사항을 필히 주의해야 함
+
+- 구현된 프로그램은 실행 완결성 필수 (명확한 실행&정확한 결과 출력, 통상의 실행 시간)
+- 소 문항별 결과 검수 필수 (선행문항 오류 시, 후속문항 전체에 오류가 발생할 수 있음)
+- 제시된 조건이 없는 한 선행요구사항 유지 필수
+- 프로그램 실행 위치 및 실행결과출력 (위치, 파일명, 데이터포맷)은 요구사항과 정확히 일치 필수
+(콘솔 출력이 평가 대상일 경우 불필요한 로그 출력 금지)
+- 제시된 모든 위치는 상대경로 사용 필수 (프로그램 실행 위치 기준)
+- 프로그램 종료조건에 맞는 처리 필수 (불필요한 입력대기를 하거나, 요구사항과 다르게 종료하면
+안됨)
+- 제공되는 샘플 파일과 다른 데이터로 채점하므로 제공되는 파일의 내용을 하드코딩하지 말 것
+- 모든 문자는 요구사항에 맞는 대소문자 구분 필수
+
+
+
+### 주요 알고리즘
+
+| 주요 알고리즘/핵심 포인트       | 학습 포인트                     |
+| :------------------------------ | :------------------------------ |
+| 문자열 분할(split)              | 공백 기준 분할, 특수문자 처리   |
+| 해시맵(딕셔너리) 기반 탐색      | 파일 읽기, 키-값 매핑, 예외처리 |
+| 집합(set) 연산, 리스트 필터링   | 벡터 일치 여부로 필터링         |
+| 파일 파싱, 상대경로 처리        | 하드코딩 금지, 경로 오류 방지   |
+| HTTP POST, JSON 직렬화/역직렬화 | 요청/응답 포맷 일치, 오류처리   |
+
+
+
+
+### 제공 라이브러리
+
+| 라이브러리              | 주요 특징                                                    | 대표 용도/활용 예시                              |
+| :---------------------- | :----------------------------------------------------------- | :----------------------------------------------- |
+| Jetty 9 Embedded Server | - 경량/고성능 Java HTTP 서버 - 애플리케이션에 내장(임베디드) 가능 - Servlet, REST API, WebSocket 지원 - 비동기 처리 및 다양한 확장성 제공 | REST API 서버, 내장 웹서비스, 마이크로서비스     |
+| Jetty 9 HttpClient      | - 동기/비동기 HTTP 요청 지원 - HTTP/1.1, HTTP/2 등 최신 프로토콜 지원 - 경량 구조, 빠른 처리 - 커스텀 헤더, 쿠키, 인증 등 네트워크 옵션 풍부 | 외부 API 연동, 서비스 간 통신, 테스트 클라이언트 |
+| Google Gson 2.10.1      | - Java 객체 ↔ JSON 직렬화/역직렬화 - 컬렉션, 제네릭, 트리모델 지원 - 경량, 빠른 성능 - 별도 어노테이션 없이 POJO 사용 가능 | JSON 데이터 파싱/생성, REST API 데이터 처리      |
+
+#### Jetty 9 Embedded HTTP Server 
+
+Jetty 9를 임베디드 HTTP 서버로 사용하여 간단한 REST API를 구현하는 예시.
+
+```java
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHandler;
+import javax.servlet.http.*;
+import javax.servlet.*;
+
+public class JettyEmbeddedExample {
+    public static void main(String[] args) throws Exception {
+        Server server = new Server(8080); // 8080 포트로 Jetty 서버 인스턴스 생성
+
+        ServletHandler handler = new ServletHandler(); // 서블릿 핸들러 준비
+        handler.addServletWithMapping(HelloServlet.class, "/hello"); // "/hello" 경로에 서블릿 매핑
+        server.setHandler(handler); // 서버에 핸들러 등록
+
+        server.start(); // 서버 시작
+        server.join();  // 메인 스레드 대기(서버 종료까지)
+    }
+
+    // 간단한 Hello 서블릿 구현
+    public static class HelloServlet extends HttpServlet {
+        @Override
+        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, java.io.IOException {
+            resp.setContentType("text/plain; charset=utf-8");
+            resp.getWriter().write("Hello, Jetty Embedded!");
+        }
+    }
+}
+```
+
+####  Jetty 9 HttpClient 샘플 코드
+
+Jetty 9의 HttpClient로 JSON 데이터를 POST로 전송하고 응답을 받는 예시.
+
+```java
+javaimport org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.util.StringContentProvider;
+import org.eclipse.jetty.http.HttpHeader;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+public class JettyHttpClientExample {
+    public static void main(String[] args) throws Exception {
+        HttpClient httpClient = new HttpClient(); // HttpClient 인스턴스 생성
+        httpClient.start(); // 내부 리소스 초기화
+
+        // 전송할 JSON 데이터 생성
+        String processed = "sample query";
+        String json = String.format("{\"query\":\"%s\"}", processed);
+
+        // POST 요청 생성 및 전송
+        ContentResponse response = httpClient.POST("http://localhost:8080/hello") // 요청 URL
+            .header(HttpHeader.CONTENT_TYPE, "application/json")                  // Content-Type 헤더 지정
+            .content(new StringContentProvider(json), "application/json")          // 요청 바디에 JSON 데이터 설정
+            .send();                                                              // 동기 요청
+
+        String responseBody = response.getContentAsString(); // 응답 본문 추출
+        System.out.println("서버 응답: " + responseBody);
+
+        httpClient.stop(); // 리소스 반환
+    }
+}
+```
+
+#### Google Gson 2.10.1 샘플 코드
+
+#####  Java 객체 → JSON 문자열 변환
+
+```java
+import com.google.gson.Gson;
+
+public class GsonToJsonExample {
+    public static void main(String[] args) {
+        Person person = new Person("홍길동", 25);
+        Gson gson = new Gson();
+        String json = gson.toJson(person);
+        System.out.println(json); // {"name":"홍길동","age":25}
+    }
+    static class Person {
+        String name;
+        int age;
+        Person(String name, int age) { this.name = name; this.age = age; }
+    }
+}
+```
+
+
+#####  JSON 문자열 → Java 객체 변환
+
+```java
+import com.google.gson.Gson;
+
+public class GsonFromJsonExample {
+    public static void main(String[] args) {
+        String json = "{\"name\":\"홍길동\",\"age\":25}";
+        Gson gson = new Gson();
+        Person person = gson.fromJson(json, Person.class);
+        System.out.println(person.name); // 홍길동
+        System.out.println(person.age);  // 25
+    }
+    static class Person {
+        String name;
+        int age;
+    }
+}
+```
+
+
+#### 주요 기능 요약표
+
+| 기능               | 메서드 예시                          | 설명                      |
+| :----------------- | :----------------------------------- | :------------------------ |
+| 객체 → JSON 문자열 | `gson.toJson(obj)`                   | Java 객체를 JSON으로 변환 |
+| JSON → 객체        | `gson.fromJson(json, Class)`         | JSON을 Java 객체로 변환   |
+| Map ↔ JSON         | `gson.toJson(map)` / `fromJson(...)` | Map과 JSON 상호 변환      |
+| 컬렉션/배열 지원   | `fromJson(json, TypeToken)`          | List, Set 등 제네릭 지원  |
+| 트리 모델 파싱     | `JsonParser.parseString(json)`       | JsonObject/JsonArray 사용 |
+| Pretty Printing    | `GsonBuilder().setPrettyPrinting()`  | 보기 좋은 JSON 출력       |
+
+##### JsonObject/JsonArray 직접 다루기
+
+```java
+import com.google.gson.*;
+
+public class JsonTreeExample {
+    public static void main(String[] args) {
+        String json = "{\"id\":1,\"students\":[\"Anna\",\"Jerry\"],\"subject\":{\"name\":\"Java\",\"professor\":\"Tony\"}}";
+        JsonElement element = JsonParser.parseString(json);
+        JsonObject object = element.getAsJsonObject();
+        long id = object.get("id").getAsLong();
+        JsonArray students = object.get("students").getAsJsonArray();
+        for (JsonElement stu : students) {
+            System.out.println(stu.getAsString());
+        }
+        JsonObject subject = object.get("subject").getAsJsonObject();
+        System.out.println(subject.get("name").getAsString());
+    }
+}
+```
+
+
+#####  컬렉션, 제네릭 타입 파싱
+
+```java
+import com.google.gson.reflect.TypeToken;
+// ...
+String json = "[{\"name\":\"홍길동\",\"age\":25},{\"name\":\"이순신\",\"age\":30}]";
+Type listType = new TypeToken<List<Person>>(){}.getType();
+List<Person> people = gson.fromJson(json, listType);
+```
+
+ 
+
+## 기출문제 풀이(Pilot)
+
+> [!NOTE]
+>
+> #### 목표 시스템
+>
+> AI 서비스 플랫폼
+>
+> #### 개요
+>
+> 해당 시스템 구현을 통해 요구사항 분석, 데이터 구조화, HTTP Server/Client 구현 등의 기술역량
+> 및 프로그램 구현 역량을 측정하기 위한 문제입니다.
+>
+> #### 설명
+>
+> 본 프로그램은 사전학습된 AI 모델을 활용하여 요청 받은 Query 문장들에 대한 분류를 수행하고
+> 결과를 제공하는 AI 서비스 플랫폼입니다.
+
+
+
+### 문항 1: 콘솔 입력 문장 토큰화 및 워드임베딩
+
+**기능 요약:**
+
+- 콘솔에서 문장 입력 → 단어별 소문자 변환 → 사전(DICTIONARY.TXT)에서 임베딩 벡터 매핑 → 결과 출력
+- 종료 없이 반복 입력/출력
+
+
+#### 구성도
+
+```mermaid
+flowchart TD
+    A[콘솔 입력] --> B[토큰화/소문자 변환]
+    B --> C[사전 매핑]
+    C --> D[임베딩 벡터 출력]
+    D --> A
+```
+
+#### 실행 코드
+
+```java
+import java.io.*;
+import java.util.*;
+
+public class SP_TEST {
+    // 단어 사전 저장용 Map
+    private static final Map<String, String> dictionary = new HashMap<>();
+
+    public static void main(String[] args) throws Exception {
+        loadDictionary("DICTIONARY.TXT");
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            String[] tokens = line.trim().split("\\s+");
+            List<String> vectors = new ArrayList<>();
+            for (String token : tokens) {
+                String key = token.toLowerCase();
+                if (dictionary.containsKey(key)) {
+                    vectors.add(dictionary.get(key));
+                }
+            }
+            System.out.println(String.join(" ", vectors));
+        }
+    }
+
+    // 단어 사전 파일 로드
+    private static void loadDictionary(String path) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("#");
+                if (parts.length == 2) {
+                    dictionary.put(parts[0], parts[1]);
+                }
+            }
+        }
+    }
+}
+```
+
+#### 코드 설명
+
+- `loadDictionary`: DICTIONARY.TXT 파일을 읽어 단어-벡터 매핑
+- `main`: 입력 문장 토큰화, 소문자 변환, 사전 참조, 결과 출력
+- **반복 입력/출력, 종료 없음**
+
+
+
+### 문항 2: 불용어(Stopword) 제거 추가
+
+**기능 요약:**
+
+- STOPWORD.TXT의 벡터 목록을 불용어로 사용
+- 임베딩 벡터가 불용어에 포함되면 출력에서 제외
+
+
+
+#### 구성도
+
+```mermaid
+flowchart TD
+    A[콘솔 입력] --> B[토큰화/소문자 변환]
+    B --> C[사전 매핑]
+    C --> D{불용어 벡터?}
+    D -- 예 --> E[제외]
+    D -- 아니오 --> F[임베딩 벡터 출력]
+    E --> A
+    F --> A
+```
+
+#### 실행 코드 (불용어 처리 추가)
+
+```java
+import java.io.*;
+import java.util.*;
+
+public class SP_TEST {
+    private static final Map<String, String> dictionary = new HashMap<>();
+    private static final Set<String> stopwords = new HashSet<>();
+
+    public static void main(String[] args) throws Exception {
+        loadDictionary("DICTIONARY.TXT");
+        loadStopwords("STOPWORD.TXT");
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            String[] tokens = line.trim().split("\\s+");
+            List<String> vectors = new ArrayList<>();
+            for (String token : tokens) {
+                String key = token.toLowerCase();
+                String vector = dictionary.get(key);
+                if (vector != null && !stopwords.contains(vector)) {
+                    vectors.add(vector);
+                }
+            }
+            System.out.println(String.join(" ", vectors));
+        }
+    }
+
+    private static void loadDictionary(String path) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("#");
+                if (parts.length == 2) {
+                    dictionary.put(parts[0], parts[1]);
+                }
+            }
+        }
+    }
+
+    private static void loadStopwords(String path) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                stopwords.add(line.trim());
+            }
+        }
+    }
+}
+```
+
+
+#### 코드 설명
+
+- `loadStopwords`: STOPWORD.TXT의 각 줄을 Set에 저장
+- 메인 로직에서 불용어 벡터는 출력에서 제외
+
+
+
+### 문항 3: Jetty 기반 HTTP 서버 + AI 모델 연동
+
+**기능 요약:**
+
+- POST 요청으로 AI 모델명/문장 배열 수신
+- 각 문장 전처리(토큰화, 임베딩, 불용어 제거)
+- 모델 서버에 HTTP POST로 분류 요청, 결과 코드 → 결과값 변환
+- 최종 결과 JSON 응답
+
+
+
+#### 구성도
+
+```mermaid
+flowchart TD
+    A[HTTP POST 요청 수신] --> B[모델명/문장 배열 파싱]
+    B --> C[문장별 전처리]
+    C --> D[모델 서버에 POST]
+    D --> E[분류 코드 → 결과값 매핑]
+    E --> F[JSON 결과 응답]
+```
+
+#### Jetty + Gson 활용 예시 코드
+
+```java
+import com.google.gson.*;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHandler;
+import javax.servlet.http.*;
+import javax.servlet.*;
+import org.eclipse.jetty.client.*;
+import org.eclipse.jetty.client.api.*;
+import org.eclipse.jetty.client.util.*;
+import org.eclipse.jetty.http.*;
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+public class SP_TEST {
+    private static final Map<String, String> dictionary = new HashMap<>();
+    private static final Set<String> stopwords = new HashSet<>();
+    private static final List<ModelInfo> models = new ArrayList<>();
+
+    public static void main(String[] args) throws Exception {
+        loadDictionary("DICTIONARY.TXT");
+        loadStopwords("STOPWORD.TXT");
+        loadModels("MODELS.JSON");
+
+        Server server = new Server(8080);
+        ServletHandler handler = new ServletHandler();
+        handler.addServletWithMapping(MainServlet.class, "/");
+        server.setHandler(handler);
+        server.start();
+        server.join();
+    }
+
+    // 모델 정보 클래스
+    public static class ModelInfo {
+        String modelname;
+        String url;
+        List<ClassInfo> classes;
+    }
+    public static class ClassInfo {
+        String code;
+        String value;
+    }
+
+    // 메인 서블릿
+    public static class MainServlet extends HttpServlet {
+        @Override
+        protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+            Gson gson = new Gson();
+            JsonObject requestJson = gson.fromJson(new InputStreamReader(req.getInputStream()), JsonObject.class);
+            String modelName = requestJson.get("modelname").getAsString();
+            JsonArray queries = requestJson.getAsJsonArray("queries");
+
+            ModelInfo model = models.stream().filter(m -> m.modelname.equals(modelName)).findFirst().orElse(null);
+            if (model == null) {
+                resp.setStatus(400);
+                resp.getWriter().write("{\"error\":\"Model not found\"}");
+                return;
+            }
+
+            List<String> results = new ArrayList<>();
+            for (JsonElement queryElem : queries) {
+                String query = queryElem.getAsString();
+                String processed = preprocess(query);
+                String code = requestModel(model.url, processed);
+                String value = model.classes.stream().filter(c -> c.code.equals(code)).map(c -> c.value).findFirst().orElse("unknown");
+                results.add(value);
+            }
+            JsonObject responseJson = new JsonObject();
+            JsonArray resArr = new JsonArray();
+            for (String r : results) resArr.add(r);
+            responseJson.add("results", resArr);
+
+            resp.setContentType("application/json");
+            resp.getWriter().write(gson.toJson(responseJson));
+        }
+
+        // 문장 전처리 (토큰화, 임베딩, 불용어 제거)
+        private String preprocess(String sentence) {
+            String[] tokens = sentence.trim().split("\\s+");
+            List<String> vectors = new ArrayList<>();
+            for (String token : tokens) {
+                String key = token.toLowerCase();
+                String vector = dictionary.get(key);
+                if (vector != null && !stopwords.contains(vector)) {
+                    vectors.add(vector);
+                }
+            }
+            return String.join(" ", vectors);
+        }
+
+        // 모델 서버에 HTTP POST 요청 (Jetty 9 HttpClient)
+        private String requestModel(String url, String processed) throws Exception {
+            Gson gson = new Gson(); // Gson 인스턴스
+            HttpClient httpClient = new HttpClient(); // Jetty HttpClient 생성
+            httpClient.start(); // HttpClient 시작
+
+            // JSON 바디 생성
+            String json = String.format("{\"query\":\"%s\"}", processed);
+
+            // POST 요청 생성 및 전송
+            ContentResponse response = httpClient.POST(url)
+                .header(HttpHeader.CONTENT_TYPE, "application/json")        // Content-Type 지정
+                .content(new StringContentProvider(json), "application/json") // JSON 바디 설정
+                .send();                                                    // 동기 전송
+
+            // 응답 코드 및 바디 처리
+            String responseBody = response.getContentAsString();
+            JsonObject res = gson.fromJson(responseBody, JsonObject.class);
+            httpClient.stop(); // HttpClient 종료 (실전에서는 재사용 권장)
+
+            return res.get("result").getAsString(); // 결과 추출
+        }
+    }
+
+    // 사전, 불용어, 모델 로드 메소드 (문항1-2와 동일)
+    private static void loadDictionary(String path) throws IOException { /* ... */ }
+    private static void loadStopwords(String path) throws IOException { /* ... */ }
+    private static void loadModels(String path) throws IOException {
+        Gson gson = new Gson();
+        try (Reader reader = new FileReader(path)) {
+            JsonObject obj = gson.fromJson(reader, JsonObject.class);
+            JsonArray arr = obj.getAsJsonArray("models");
+            for (JsonElement e : arr) {
+                models.add(gson.fromJson(e, ModelInfo.class));
+            }
+        }
+    }
+}
+```
+
+
+#### 코드 설명
+
+- Jetty 내장 서버로 HTTP POST 요청 수신
+- Gson으로 JSON 파싱 및 응답
+- 모델 정보, 분류 코드-값 매핑
+- 각 문장 전처리 후 모델 서버에 POST, 결과 코드 변환
+- 예외 및 오류 처리
+- 모든 클래스/메소드/변수에 주석 필수
+
+
+
+## 참고
+
+### Java Stream
+
+Java Stream API는 Java 8부터 도입된 기능으로, 컬렉션(List, Set 등)이나 배열에 저장된 데이터를 함수형 스타일로 효율적이고 간결하게 처리할 수 있게 해줍니다. 데이터를 반복, 필터링, 매핑, 집계 등 다양한 연산을 손쉽게 수행할 수 있습니다.
+
+#### Stream의 주요 특징
+
+- **함수형 프로그래밍 지원**: 람다(Lambda)와 함께 사용하여 코드가 간결해짐
+- **내부 반복(Internal Iteration)**: for-each 대신 내부적으로 반복 처리
+- **불변성**: 원본 데이터 변경 없이 새로운 결과 생성
+- **지연 연산(Lazy Evaluation)**: 최종 연산이 실행될 때 실제로 처리됨
+- **병렬 처리 지원**: parallelStream()으로 손쉽게 병렬 연산 가능
+
+
+#### Stream 기본 구조
+
+```java
+컬렉션.stream()
+    .중간연산1()
+    .중간연산2()
+    ...
+    .최종연산();
+```
+
+- **중간연산**: filter, map, sorted 등 (Stream 반환)
+- **최종연산**: forEach, collect, count 등 (Stream 종료)
+
+
+#### 주요 연산별 사용법 및 예제
+
+##### 1) 생성 (Stream 생성)
+
+| 방법         | 예시 코드            |
+| :----------- | :------------------- |
+| 리스트에서   | `list.stream()`      |
+| 배열에서     | `Arrays.stream(arr)` |
+| 값 직접 지정 | `Stream.of(1, 2, 3)` |
+
+```java
+List<String> names = Arrays.asList("Tom", "Jerry", "Anna");
+Stream<String> stream = names.stream();
+```
+
+
+##### 2) 중간 연산
+
+- **filter**: 조건에 맞는 요소만 추출
+- **map**: 각 요소를 변환
+- **sorted**: 정렬
+- **distinct**: 중복 제거
+- **limit, skip**: 일부만 선택
+
+```java
+List<String> names = Arrays.asList("Tom", "Jerry", "Anna", "Tom");
+List<String> result = names.stream()
+    .filter(name -> name.length() > 3)     // 길이 3 초과만
+    .map(String::toUpperCase)              // 대문자 변환
+    .distinct()                            // 중복 제거
+    .sorted()                              // 정렬
+    .collect(Collectors.toList());         // 리스트로 수집
+System.out.println(result);
+```
+
+> 출력: `[JERRY, ANNA]`
+
+##### 3) 최종 연산
+
+- **collect**: 결과를 컬렉션 등으로 수집
+- **forEach**: 각 요소에 작업 수행
+- **count**: 요소 개수 반환
+- **anyMatch, allMatch, noneMatch**: 조건 일치 여부 확인
+- **reduce**: 누적 집계(합계, 곱 등)
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+int sum = numbers.stream().reduce(0, Integer::sum); // 합계
+System.out.println(sum); // 15
+```
+
+#### 예제 1
+
+문자열 리스트에서 조건에 맞는 요소 추출 및 가공
+
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class StreamExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Tom", "Jerry", "Anna", "Tom", "Mike");
+
+        // 4글자 이상인 이름을 대문자로 변환, 중복 제거, 정렬 후 리스트로 반환
+        List<String> result = names.stream()
+            .filter(name -> name.length() >= 4)
+            .map(String::toUpperCase)
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
+
+        System.out.println(result); // [ANNA, JERRY, MIKE]
+    }
+}
+```
+
+#### 예제 2
+
+숫자 리스트에서 짝수만 제곱하여 합계 구하기
+
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class StreamNumberExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+
+        int sumOfSquares = numbers.stream()
+            .filter(n -> n % 2 == 0)     // 짝수만
+            .map(n -> n * n)             // 제곱
+            .reduce(0, Integer::sum);    // 합계
+
+        System.out.println(sumOfSquares); // 56 (2*2 + 4*4 + 6*6)
+    }
+}
+```
+
+#### 병렬 스트림(Parallel Stream)
+
+대용량 데이터 처리 시 병렬로 작업할 수 있습니다.
+
+```java
+List<Integer> numbers = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+long count = numbers.parallelStream()
+    .filter(n -> n % 2 == 0)
+    .count();
+System.out.println(count); // 5
+```
+
+
+
+### String.format 
+
+`String.format`은 문자열을 원하는 형식(패턴)에 맞춰 동적으로 조립할 때 사용하는 Java 표준 메서드입니다. C 언어의 `printf`와 유사한 방식으로, 텍스트와 변수값을 손쉽게 결합할 수 있습니다.
+
+#### 기본 사용법
+
+```
+javaString result = String.format("이름: %s, 나이: %d", "홍길동", 25);
+System.out.println(result); // 출력: 이름: 홍길동, 나이: 25
+```
+
+- `%s`: 문자열
+- `%d`: 정수
+- `%f`: 실수(소수점)
+- `%n`: 줄바꿈(플랫폼 독립)
+
+#### 주요 포맷 지정자
+
+| 포맷 지정자 | 설명              | 예시 값 | 결과 예시 |
+| :---------- | :---------------- | :------ | :-------- |
+| `%s`        | 문자열            | "Java"  | Java      |
+| `%d`        | 10진수 정수       | 123     | 123       |
+| `%f`        | 실수(기본 소수 6) | 3.14    | 3.140000  |
+| `%c`        | 문자              | 'A'     | A         |
+| `%b`        | boolean           | true    | true      |
+| `%x`        | 16진수            | 255     | ff        |
+| `%o`        | 8진수             | 8       | 10        |
+| `%%`        | % 자체 출력       | -       | %         |
+
+#### 자리수, 정렬, 소수점 지정
+
+```
+java// 최소 10자리, 오른쪽 정렬
+System.out.println(String.format("%10s", "Java")); // "      Java"
+
+// 최소 10자리, 왼쪽 정렬
+System.out.println(String.format("%-10s", "Java")); // "Java      "
+
+// 소수점 둘째 자리까지(반올림)
+System.out.println(String.format("%.2f", 3.14159)); // "3.14"
+
+// 0으로 자리수 채우기
+System.out.println(String.format("%04d", 7)); // "0007"
+```
+
+#### 여러 값 포맷팅
+
+```
+javaString name = "Anna";
+int age = 20;
+double score = 95.1234;
+
+String info = String.format("이름: %s, 나이: %d, 점수: %.1f", name, age, score);
+System.out.println(info); // "이름: Anna, 나이: 20, 점수: 95.1"
+```
+
+#### 날짜 및 시간 포맷팅
+
+```
+javaimport java.util.Date;
+
+Date now = new Date();
+String dateStr = String.format("%tF %tT", now, now); // "2025-07-14 11:22:00"
+System.out.println(dateStr);
+```
+
+| 포맷  | 설명        | 예시 결과  |
+| :---- | :---------- | :--------- |
+| `%tF` | yyyy-MM-dd  | 2025-07-14 |
+| `%tT` | HH:mm:ss    | 11:22:00   |
+| `%tY` | 연도(4자리) | 2025       |
+| `%tm` | 월(2자리)   | 07         |
+| `%td` | 일(2자리)   | 14         |
+
+#### 예제 
+
+| 예시 코드                                     | 결과                 |
+| :-------------------------------------------- | :------------------- |
+| `String.format("%s님 환영합니다!", "홍길동")` | 홍길동님 환영합니다! |
+| `String.format("%,d", 10000)`                 | 10,000               |
+| `String.format("%8.2f", 3.14)`                | " 3.14"              |
+| `String.format("%-10s", "Hello")`             | "Hello "             |
+| `String.format("0x%X", 255)`                  | 0xFF                 |
+
+
+
+### 시간 측정
+
+작업 또는 코드 블록의 **실행 시간**을 측정하는 방법을 단계별로 안내합니다. Java 표준 API만 사용하며, 실무에서 가장 널리 쓰이는 방식입니다.
+
+#### System.currentTimeMillis() 
+
+가장 간단하게 **밀리초 단위**로 작업 시간을 측정할 수 있습니다.
+
+```
+javalong start = System.currentTimeMillis(); // 시작 시각 기록
+
+// 측정할 작업 코드
+Thread.sleep(500); // 예시: 0.5초 대기
+
+long end = System.currentTimeMillis();   // 종료 시각 기록
+long elapsed = end - start;              // 경과 시간(밀리초)
+System.out.println("작업 소요 시간: " + elapsed + "ms");
+```
+
+| 메서드                   | 설명                        |
+| :----------------------- | :-------------------------- |
+| System.currentTimeMillis | 1970년 1월 1일부터의 밀리초 |
+
+#### System.nanoTime() 활용
+
+**더 정밀한 측정**이 필요할 때는 `System.nanoTime()`을 사용합니다. 나노초 단위로 측정되며, 상대 시간 측정에 적합합니다.
+
+```
+javalong start = System.nanoTime(); // 시작 시각(나노초)
+
+for (int i = 0; i < 1000000; i++) {
+    Math.sqrt(i); // 예시 작업
+}
+
+long end = System.nanoTime();   // 종료 시각(나노초)
+long elapsed = end - start;     // 경과 시간(나노초)
+System.out.println("작업 소요 시간: " + (elapsed / 1_000_000.0) + "ms");
+```
+
+| 메서드          | 설명                       |
+| :-------------- | :------------------------- |
+| System.nanoTime | 나노초 단위 상대 시간 측정 |
+
+#### 예제(함수 실행 시간 측정)
+
+```
+javapublic static void main(String[] args) {
+    long start = System.nanoTime(); // 시작 시각
+
+    doHeavyWork(); // 측정할 함수
+
+    long end = System.nanoTime(); // 종료 시각
+    double elapsedMs = (end - start) / 1_000_000.0;
+    System.out.printf("함수 실행 시간: %.3fms%n", elapsedMs);
+}
+
+static void doHeavyWork() {
+    // 예시: 무거운 작업
+    for (int i = 0; i < 1_000_000; i++) {
+        Math.pow(i, 0.5);
+    }
+}
+```
+
+
+
+### File I/O
+
+#### File 읽기
+Java에서 파일을 읽고, 특정 구분자(Delimiter)로 데이터를 분리해 Key/Value 형태로 가공하는 방법을 단계별로 안내합니다.
+
+아래는 `#` 구분자로 구성된 파일을 읽어 HashMap에 Key/Value로 저장하는 예시입니다.
+
+```
+javaimport java.io.*;
+import java.util.*;
+
+public class FileToMapExample {
+    public static void main(String[] args) throws IOException {
+        String filePath = "sample.txt"; // 읽을 파일 경로
+        String delimiter = "#";         // 구분자(Delemeter) 지정
+        Map<String, String> map = new HashMap<>(); // 결과 저장용 Map
+
+        // 파일을 한 줄씩 읽기
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {      // 한 줄씩 읽음
+                String[] parts = line.split(delimiter);   // 구분자로 분리
+                if (parts.length == 2) {                  // Key/Value 쌍일 때만 저장
+                    String key = parts[0].trim();         // 앞부분: Key
+                    String value = parts[1].trim();       // 뒷부분: Value
+                    map.put(key, value);                  // Map에 저장
+                }
+            }
+        }
+
+        // 결과 확인: Map 전체 출력
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " => " + entry.getValue());
+        }
+    }
+}
+```
+
+##### 주요 코드 설명
+
+| 구분      | 설명                                                     |
+| :-------- | :------------------------------------------------------- |
+| 파일 읽기 | `BufferedReader`로 파일을 한 줄씩 읽음                   |
+| 분리      | `split(delimiter)`로 구분자 기준 분리                    |
+| Key/Value | 분리된 배열의 0번째, 1번째를 각각 Key, Value로 사용      |
+| Map 저장  | `map.put(key, value)`로 저장                             |
+| 예외 처리 | try-with-resources로 파일 자동 닫힘, 파일 미존재 등 처리 |
+
+##### 다양한 Delemeter 사용 예시
+
+| 구분자      | split 예시 코드     |
+| :---------- | :------------------ |
+| 콤마(,)     | `line.split(",")`   |
+| 탭(\t)      | `line.split("\\t")` |
+| 세미콜론;   | `line.split(";")`   |
+| 파이프(     | )                   |
+| 복수 구분자 | `line.split("[#     |
+
+##### 확장 예시: Value가 여러 개일 때(List로 저장)
+
+```
+javaMap<String, List<String>> multiMap = new HashMap<>();
+String[] parts = line.split("#");
+if (parts.length >= 2) {
+    String key = parts[0].trim();
+    String[] values = parts[1].split(","); // Value가 콤마로 여러 개일 때
+    multiMap.put(key, Arrays.asList(values));
+}
+```
+
+#### File 쓰기
+
+Java에서 `Map<String, String>` 데이터를 파일로 저장하는 방법을 단계별로 설명합니다. 일반적으로 **텍스트 파일**에 Key/Value 쌍을 한 줄씩 기록하거나, **Properties 파일** 또는 **JSON 파일**로 저장할 수 있습니다.
+
+##### 텍스트 파일로 저장 (구분자 사용)
+
+각 Key/Value를 한 줄에 `"Key#Value"` 형식으로 저장하는 예시입니다.
+
+```
+javaimport java.io.*;
+import java.util.*;
+
+public class MapToFileExample {
+    public static void main(String[] args) throws IOException {
+        Map<String, String> map = new HashMap<>();
+        map.put("apple", "사과");
+        map.put("banana", "바나나");
+        map.put("grape", "포도");
+
+        String filePath = "output.txt";     // 저장할 파일 경로
+        String delimiter = "#";             // Key/Value 구분자
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                // Key와 Value를 구분자로 연결해 한 줄로 기록
+                bw.write(entry.getKey() + delimiter + entry.getValue());
+                bw.newLine(); // 줄 바꿈
+            }
+        }
+        System.out.println("파일 저장 완료!");
+    }
+}
+```
+
+##### 주요 설명
+
+| 구분      | 설명                                       |
+| :-------- | :----------------------------------------- |
+| 파일 경로 | 원하는 위치와 파일명 지정                  |
+| 구분자    | Key와 Value를 구분할 문자(예: `#`, `,` 등) |
+| 줄 바꿈   | 각 Key/Value 쌍을 한 줄씩 기록             |
+| 예외 처리 | try-with-resources로 자동 파일 닫힘        |
+
+##### Properties 파일로 저장
+
+Java의 `Properties` 객체를 활용하면 Key/Value를 손쉽게 `.properties` 형식으로 저장할 수 있습니다.
+
+```
+javaimport java.io.*;
+import java.util.*;
+
+public class MapToPropertiesFile {
+    public static void main(String[] args) throws IOException {
+        Map<String, String> map = new HashMap<>();
+        map.put("username", "admin");
+        map.put("password", "1234");
+
+        Properties props = new Properties();
+        props.putAll(map);
+
+        try (FileOutputStream fos = new FileOutputStream("config.properties")) {
+            props.store(fos, "설정 정보");
+        }
+        System.out.println("Properties 파일 저장 완료!");
+    }
+}
+```
+
+##### JSON 파일로 저장 (Gson 활용)
+
+`Gson` 라이브러리를 사용하면 Map을 JSON 파일로 쉽게 저장할 수 있습니다.
+
+```
+javaimport com.google.gson.Gson;
+import java.io.*;
+import java.util.*;
+
+public class MapToJsonFile {
+    public static void main(String[] args) throws IOException {
+        Map<String, String> map = new HashMap<>();
+        map.put("city", "Seoul");
+        map.put("country", "Korea");
+
+        Gson gson = new Gson();
+        try (Writer writer = new FileWriter("data.json")) {
+            gson.toJson(map, writer); // Map을 JSON 형식으로 저장
+        }
+        System.out.println("JSON 파일 저장 완료!");
+    }
+}
+```
+
+### Java Thread 
+
+Java에서 Thread는 멀티태스킹 및 병렬 처리가 필요한 상황에서 매우 중요한 역할을 합니다. 아래는 Java Thread의 기본 개념, 주요 메소드, 실전 예제, 그리고 실무에서 자주 쓰는 패턴을 포함한 사용 가이드입니다.
+
+####  Thread의 기본 개념
+
+- **Thread란?**
+  - 하나의 프로세스 내에서 실행되는 독립적인 실행 흐름
+  - 멀티스레딩을 통해 여러 작업을 동시에 처리 가능
+- **Thread 생성 방법**
+  - `Thread` 클래스를 상속
+  - `Runnable` 인터페이스 구현
+
+####  Thread 관련 주요 메소드
+
+| 메소드      | 설명                             |
+| :---------- | :------------------------------- |
+| start()     | 스레드 실행 시작                 |
+| run()       | 스레드가 실행할 코드 작성        |
+| sleep(ms)   | 지정 시간(ms) 동안 일시 정지     |
+| join()      | 다른 스레드가 종료될 때까지 대기 |
+| interrupt() | 스레드에 인터럽트 신호 전달      |
+| isAlive()   | 스레드가 실행 중인지 확인        |
+
+#### Thread 기본 샘플 코드
+
+##### Thread 클래스 상속
+
+```
+java// Thread 클래스를 상속하여 스레드 구현
+public class MyThread extends Thread {
+    @Override
+    public void run() {
+        // 스레드가 실행할 작업
+        for (int i = 0; i < 5; i++) {
+            System.out.println("MyThread 실행: " + i);
+            try {
+                Thread.sleep(500); // 0.5초 대기
+            } catch (InterruptedException e) {
+                System.out.println("인터럽트 발생");
+            }
+        }
+    }
+}
+
+// 실행 예시
+public class ThreadExample1 {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread();
+        thread.start(); // 스레드 시작
+    }
+}
+```
+
+#####  Runnable 인터페이스 구현
+
+```
+java// Runnable 인터페이스를 구현하여 스레드 실행
+public class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println("MyRunnable 실행: " + i);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println("인터럽트 발생");
+            }
+        }
+    }
+}
+
+public class ThreadExample2 {
+    public static void main(String[] args) {
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
+    }
+}
+```
+
+#### 실전 예제: 여러 Agent를 Thread로 병렬 실행
+
+```
+javaimport java.util.*;
+
+class AgentWorker implements Runnable {
+    private final String agentName;
+    private final int taskCount;
+    private final int input;
+
+    public AgentWorker(String agentName, int taskCount, int input) {
+        this.agentName = agentName;
+        this.taskCount = taskCount;
+        this.input = input;
+    }
+
+    @Override
+    public void run() {
+        int result = 0;
+        for (int i = 0; i < taskCount; i++) {
+            result += (input + i);
+        }
+        System.out.println(agentName + " 작업 완료: " + result);
+    }
+}
+
+public class MultiAgentThreadExample {
+    public static void main(String[] args) {
+        // 각 Agent별 할당량
+        Map<String, Integer> policy = Map.of("A", 50, "B", 30, "C", 20);
+        int input = 100;
+
+        List<Thread> threads = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : policy.entrySet()) {
+            Thread t = new Thread(new AgentWorker(entry.getKey(), entry.getValue(), input));
+            threads.add(t);
+            t.start();
+        }
+
+        // 모든 스레드가 종료될 때까지 대기
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                System.out.println("스레드 대기 중 인터럽트 발생");
+            }
+        }
+        System.out.println("모든 Agent 작업 완료");
+    }
+}
+```
+
+#### 실전 예제: Callable & Future 기본 예제
+```java
+javaimport java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+// Callable을 구현하여 결과값 반환
+class SumTask implements Callable<Integer> {
+    private final int start;
+    private final int count;
+
+    public SumTask(int start, int count) {
+        this.start = start;
+        this.count = count;
+    }
+
+    @Override
+    public Integer call() {
+        int sum = 0;
+        for (int i = 0; i < count; i++) {
+            sum += (start + i);
+        }
+        return sum;
+    }
+}
+
+public class CallableFutureSample {
+    public static void main(String[] args) throws Exception {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        // 각 Agent별 작업 제출
+        Future<Integer> resultA = executor.submit(new SumTask(100, 50)); // A Agent
+        Future<Integer> resultB = executor.submit(new SumTask(100, 30)); // B Agent
+        Future<Integer> resultC = executor.submit(new SumTask(100, 20)); // C Agent
+
+        // 결과값 받기 (get()은 블로킹 호출)
+        System.out.println("A Agent 결과: " + resultA.get());
+        System.out.println("B Agent 결과: " + resultB.get());
+        System.out.println("C Agent 결과: " + resultC.get());
+
+        executor.shutdown();
+    }
+}
+```
+
+#### 실전 예제: 여러 Agent의 결과를 Map에 모으는 예제
+
+```java
+javaimport java.util.*;
+import java.util.concurrent.*;
+
+class AgentWorker implements Callable<Integer> {
+    private final String agentName;
+    private final int taskCount;
+    private final int input;
+
+    public AgentWorker(String agentName, int taskCount, int input) {
+        this.agentName = agentName;
+        this.taskCount = taskCount;
+        this.input = input;
+    }
+
+    @Override
+    public Integer call() {
+        int result = 0;
+        for (int i = 0; i < taskCount; i++) {
+            result += (input + i);
+        }
+        System.out.println(agentName + " 작업 완료: " + result);
+        return result;
+    }
+}
+
+public class MultiAgentResultCollect {
+    public static void main(String[] args) throws Exception {
+        Map<String, Integer> policy = Map.of("A", 50, "B", 30, "C", 20);
+        int input = 100;
+        ExecutorService executor = Executors.newFixedThreadPool(policy.size());
+        Map<String, Future<Integer>> futures = new HashMap<>();
+
+        // Agent별 작업 제출
+        for (Map.Entry<String, Integer> entry : policy.entrySet()) {
+            futures.put(entry.getKey(), executor.submit(
+                new AgentWorker(entry.getKey(), entry.getValue(), input)));
+        }
+
+        // 결과 수집
+        Map<String, Integer> results = new HashMap<>();
+        for (Map.Entry<String, Future<Integer>> entry : futures.entrySet()) {
+            results.put(entry.getKey(), entry.getValue().get());
+        }
+
+        System.out.println("전체 결과: " + results);
+        executor.shutdown();
+    }
+}
+```
+
+#### 실전 예제: CompletableFuture 기본 예제
+
+```
+javaimport java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureBasic {
+    public static void main(String[] args) {
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            // 비동기 작업
+            return "Hello";
+        }).thenApply(result -> result + " World!");
+
+        // 결과값 대기 및 반환
+        System.out.println(future.join()); // 출력: Hello World!
+    }
+}
+```
+
+#### 실전 예제: CompletableFuture 여러 작업 병렬 실행 및 결과 결합
+
+```
+javaimport java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureCombine {
+    public static void main(String[] args) {
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> "Hello");
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> "World!");
+
+        // 두 작업의 결과를 결합
+        CompletableFuture<String> greeting = hello.thenCombine(world, (h, w) -> h + " " + w);
+
+        System.out.println(greeting.join()); // 출력: Hello World!
+    }
+}
+```
+
+#### 실전 예제: CompletableFuture 여러 작업을 동시에 실행하고 모두 완료될 때까지 대기
+
+```
+javaimport java.util.concurrent.CompletableFuture;
+import java.util.Arrays;
+import java.util.List;
+
+public class CompletableFutureAllOf {
+    public static void main(String[] args) throws Exception {
+        CompletableFuture<String> f1 = CompletableFuture.supplyAsync(() -> "A");
+        CompletableFuture<String> f2 = CompletableFuture.supplyAsync(() -> "B");
+        CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "C");
+
+        CompletableFuture<Void> all = CompletableFuture.allOf(f1, f2, f3);
+
+        // 모든 작업 완료 대기
+        all.join();
+
+        // 개별 결과 확인
+        System.out.println(f1.get() + f2.get() + f3.get()); // 출력: ABC
+    }
+}
+```
+
+#### 실전 예제: CompletableFuture 실전 예제: 예외 처리 예제
+
+```
+javaimport java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureException {
+    public static void main(String[] args) {
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            if (true) throw new RuntimeException("오류 발생!");
+            return "정상";
+        }).exceptionally(ex -> "예외 처리됨: " + ex.getMessage());
+
+        System.out.println(future.join()); // 출력: 예외 처리됨: 오류 발생!
+    }
+}
+```
+
+#### 실전 예제: CompletableFuture 여러 Agent 작업 병렬 처리.
+
+```
+javaimport java.util.concurrent.*;
+import java.util.*;
+
+class AgentWorker implements Callable<Integer> {
+    private final String agentName;
+    private final int taskCount;
+    private final int input;
+
+    public AgentWorker(String agentName, int taskCount, int input) {
+        this.agentName = agentName;
+        this.taskCount = taskCount;
+        this.input = input;
+    }
+
+    @Override
+    public Integer call() {
+        int result = 0;
+        for (int i = 0; i < taskCount; i++) {
+            result += (input + i);
+        }
+        return result;
+    }
+}
+
+public class MultiAgentCompletableFuture {
+    public static void main(String[] args) {
+        Map<String, Integer> policy = Map.of("A", 50, "B", 30, "C", 20);
+        int input = 100;
+
+        List<CompletableFuture<String>> futures = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : policy.entrySet()) {
+            CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+                int result = 0;
+                for (int i = 0; i < entry.getValue(); i++) {
+                    result += (input + i);
+                }
+                return entry.getKey() + " 작업 결과: " + result;
+            });
+            futures.add(future);
+        }
+
+        // 모든 작업 완료 후 결과 출력
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+            .thenRun(() -> futures.forEach(f -> System.out.println(f.join())))
+            .join();
+    }
+}
+```
+
