@@ -1,0 +1,18 @@
+{
+	"models": [
+		{
+			"modelname": "cinema review",
+			"classes": [
+				{
+					"code": "p8aEz10h",
+					"value": "positive"
+				},
+				{
+					"code": "KjuO803l",
+					"value": "negative"
+				}
+			],
+			"url": "http://127.0.0.1:9010"
+		}
+	]
+}
