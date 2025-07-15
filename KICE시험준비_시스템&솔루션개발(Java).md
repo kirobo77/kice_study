@@ -1,6 +1,6 @@
 ## KICE시험준비 시스템&솔루션개발(Java)
 
-![image-20250714132454143](C:\Users\kirob\Downloads\image-20250714132454143.png)
+![image-20250714132454143](./images/image-20250714132454143.png)
 
 > [!NOTE]
 >
