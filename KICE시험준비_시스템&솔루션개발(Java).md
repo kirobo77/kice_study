@@ -17,9 +17,9 @@
 
 ### 시험 환경
 
-- 환경 : VDI(원격데스크탑)
+- 환경 : Cloud(원격데스크탑) 기반 통합개발환경
 
-- 언어 : Java 17
+- 개발언어 : Java 17
 
 - 개발도구 : Eclipse
 
@@ -169,13 +169,14 @@ flowchart TD
 
 ### 주요 알고리즘
 
-| 주요 알고리즘/핵심 포인트       | 학습 포인트                     |
-| :------------------------------ | :------------------------------ |
-| 문자열 분할(split)              | 공백 기준 분할, 특수문자 처리   |
-| 해시맵(딕셔너리) 기반 탐색      | 파일 읽기, 키-값 매핑, 예외처리 |
-| 집합(set) 연산, 리스트 필터링   | 벡터 일치 여부로 필터링         |
-| 파일 파싱, 상대경로 처리        | 하드코딩 금지, 경로 오류 방지   |
-| HTTP POST, JSON 직렬화/역직렬화 | 요청/응답 포맷 일치, 오류처리   |
+| 주요 알고리즘/핵심 포인트     | 학습 포인트                         |
+| :---------------------------- | :---------------------------------- |
+| 문자열 분할(split)            | 공백 기준 분할, 특수문자 처리       |
+| 해시맵(딕셔너리) 기반 탐색    | 파일 읽기, 키-값 매핑, 예외처리     |
+| 집합(set) 연산, 리스트 필터링 | 벡터 일치 여부로 필터링             |
+| 파일 파싱, 상대경로 처리      | 하드코딩 금지, 경로 오류 방지       |
+| ***JSON 직렬화/역직렬화***    | ***요청/응답 포맷 일치, 오류처리*** |
+| ***HTTP 처리***               | ***HTTP Server/Clinet***            |
 
 
 
@@ -682,7 +683,7 @@ public class SP_TEST {
 
 
 
-## 참고
+## 공통유틸
 
 ### Java Stream
 
@@ -823,7 +824,7 @@ System.out.println(count); // 5
 
 
 
-### String.format 
+### String Format
 
 `String.format`은 문자열을 원하는 형식(패턴)에 맞춰 동적으로 조립할 때 사용하는 Java 표준 메서드입니다. C 언어의 `printf`와 유사한 방식으로, 텍스트와 변수값을 손쉽게 결합할 수 있습니다.
 
@@ -967,7 +968,7 @@ javapublic static void main(String[] args) {
 
 static void doHeavyWork() {
     // 예시: 무거운 작업
-    for (int i = 0; i < 1_000_000; i++) {
+    for (int i = 0; i < 1000000; i++) {
         Math.pow(i, 0.5);
     }
 }
@@ -1494,6 +1495,559 @@ public class MultiAgentCompletableFuture {
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
             .thenRun(() -> futures.forEach(f -> System.out.println(f.join())))
             .join();
+    }
+}
+```
+
+
+
+### 정규표현식
+
+자바에서 정규표현식(Regular Expression, Regex)을 활용하면 다양한 유형의 파일을 효율적으로 파싱할 수 있다. 
+
+#### 정규표현식 기본 패턴 표
+
+| 패턴 | 설명                   | 예제     | 매칭 결과               |
+| ---- | ---------------------- | -------- | ----------------------- |
+| `.`  | 모든 문자 (개행 제외)  | `a.c`    | abc, a1c, a@c           |
+| `*`  | 앞 문자 0번 이상 반복  | `ab*c`   | ac, abc, abbc           |
+| `+`  | 앞 문자 1번 이상 반복  | `ab+c`   | abc, abbc, abbbc        |
+| `?`  | 앞 문자 0번 또는 1번   | `ab?c`   | ac, abc                 |
+| `^`  | 문자열 시작            | `^Hello` | Hello로 시작하는 문자열 |
+| `$`  | 문자열 끝              | `World$` | World로 끝나는 문자열   |
+| `\d` | 숫자 (0-9)             | `\d{3}`  | 123, 456, 789           |
+| `\w` | 문자, 숫자, 언더스코어 | `\w+`    | hello, test_123         |
+| `\s` | 공백 문자              | `\s+`    | 스페이스, 탭, 개행      |
+
+#### 문자 클래스 및 수량자 표
+
+| 패턴     | 설명              | 예제      | 매칭 결과        |
+| -------- | ----------------- | --------- | ---------------- |
+| `[a-z]`  | 소문자 a~z        | `[a-z]+`  | hello, world     |
+| `[A-Z]`  | 대문자 A~Z        | `[A-Z]+`  | HELLO, WORLD     |
+| `[0-9]`  | 숫자 0~9          | `[0-9]+`  | 123, 456         |
+| `[abc]`  | a, b, c 중 하나   | `[abc]+`  | abc, bca, cab    |
+| `[^abc]` | a, b, c 제외      | `[^abc]+` | def, xyz         |
+| `{n}`    | 정확히 n번        | `\d{3}`   | 123 (3자리 숫자) |
+| `{n,}`   | n번 이상          | `\d{3,}`  | 123, 1234, 12345 |
+| `{n,m}`  | n번 이상 m번 이하 | `\d{3,5}` | 123, 1234, 12345 |
+
+#### 자주 사용하는 패턴 예제
+
+| 용도      | 정규표현식                                            | 설명               | 매칭 예시           |
+| --------- | ----------------------------------------------------- | ------------------ | ------------------- |
+| 이메일    | `\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b` | 기본 이메일 형식   | test@example.com    |
+| 전화번호  | `\b\d{3}-\d{4}-\d{4}\b`                               | 010-1234-5678 형식 | 010-1234-5678       |
+| 날짜      | `\d{4}-\d{2}-\d{2}`                                   | YYYY-MM-DD 형식    | 2024-01-15          |
+| IP 주소   | `\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b`              | IPv4 주소          | 192.168.1.1         |
+| URL       | `https?://[^\s]+`                                     | HTTP/HTTPS URL     | https://example.com |
+| 한글 이름 | `[가-힣]{2,4}`                                        | 2-4글자 한글       | 홍길동, 김철수      |
+| 금액      | `₩[\d,]+`                                             | 원화 표시 금액     | ₩1,000, ₩50,000     |
+
+#### 텍스트 파일 내 특정 패턴 추출 (예: 이메일 주소)
+
+```
+javaimport java.io.*;
+import java.util.regex.*;
+
+public class EmailExtractor {
+    public static void main(String[] args) throws IOException {
+        // 읽을 파일 경로를 지정하세요
+        String filePath = "example.txt";
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+        // 이메일 형식의 정규표현식 (간단 버전)
+        Pattern emailPattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Matcher matcher = emailPattern.matcher(line);
+            // 한 줄에서 발견되는 모든 이메일을 검색
+            while (matcher.find()) {
+                System.out.println("추출된 이메일: " + matcher.group());
+            }
+        }
+        reader.close();
+    }
+}
+```
+
+
+
+#### Key-Value 형식 데이터 파싱 (예: config 파일)
+
+```
+javaimport java.io.*;
+import java.util.regex.*;
+
+public class ConfigParser {
+    public static void main(String[] args) throws IOException {
+        String filePath = "config.txt";
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+        // 'key = value' 형식의 정규표현식
+        Pattern pattern = Pattern.compile("^\\s*(\\w+)\\s*=\\s*(.+)$");
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                // 그룹 1: key, 그룹 2: value
+                System.out.println("Key: " + matcher.group(1) + ", Value: " + matcher.group(2));
+            }
+        }
+        reader.close();
+    }
+}
+```
+
+
+
+#### CSV 파일에서 특정 칼럼 추출 (콤마로 구분)
+
+```
+javaimport java.io.*;
+import java.util.regex.*;
+
+public class CsvColumnParser {
+    public static void main(String[] args) throws IOException {
+        String filePath = "data.csv";
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+        // CSV의 각 라인을 정규표현식으로 split
+        // 여기서는 콤마(,)로 구분, 따옴표 처리 간단화
+        String line;
+        while ((line = reader.readLine()) != null) {
+            // 값이 콤마를 포함하지 않는 경우에 유용 (간단형)
+            String[] fields = line.split(",");
+            // 예: 2번째 칼럼(인덱스 1) 추출
+            if (fields.length > 1) {
+                System.out.println("2번째 칼럼 값: " + fields[1]);
+            }
+        }
+        reader.close();
+    }
+}
+```
+
+
+
+#### 로그 파일에서 날짜 및 오류 메시지 추출
+
+```
+javaimport java.io.*;
+import java.util.regex.*;
+
+public class LogErrorParser {
+    public static void main(String[] args) throws IOException {
+        String filePath = "server.log";
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+        // 로그 예시: [2025-07-15 12:00:00] ERROR: Some error message
+        Pattern logPattern = Pattern.compile("\\[(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})\\] ERROR: (.+)");
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Matcher matcher = logPattern.matcher(line);
+            if (matcher.find()) {
+                String date = matcher.group(1);
+                String errorMsg = matcher.group(2);
+                System.out.println("오류 발생시각: " + date + ", 메시지: " + errorMsg);
+            }
+        }
+        reader.close();
+    }
+}
+```
+
+
+
+#### XML 태그에서 데이터 추출 (단순 Tag)
+
+```
+javaimport java.io.*;
+import java.util.regex.*;
+
+public class SimpleXmlParser {
+    public static void main(String[] args) throws IOException {
+        String filePath = "sample.xml";
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+        // <title>내용</title> 형식 태그 값을 추출
+        Pattern xmlPattern = Pattern.compile("<title>(.*?)</title>");
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Matcher matcher = xmlPattern.matcher(line);
+            if (matcher.find()) {
+                System.out.println("추출된 title: " + matcher.group(1));
+            }
+        }
+        reader.close();
+    }
+}
+```
+
+
+
+#### 다양한 패턴별 파싱 예제
+
+```java
+public class PatternParser extends RegexFileParser {
+    
+    public PatternParser(String fileName) {
+        super(fileName);
+    }
+    
+    // 이메일 추출
+    public List<String> extractEmails() {
+        List<String> emails = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b");
+        
+        for (String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                emails.add(matcher.group());
+            }
+        }
+        return emails;
+    }
+    
+    // 전화번호 추출
+    public List<String> extractPhoneNumbers() {
+        List<String> phones = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\b\\d{3}-\\d{4}-\\d{4}\\b");
+        
+        for (String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                phones.add(matcher.group());
+            }
+        }
+        return phones;
+    }
+    
+    // 날짜 추출
+    public List<String> extractDates() {
+        List<String> dates = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+        
+        for (String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                dates.add(matcher.group());
+            }
+        }
+        return dates;
+    }
+    
+    // IP 주소 추출
+    public List<String> extractIpAddresses() {
+        List<String> ips = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b");
+        
+        for (String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                ips.add(matcher.group());
+            }
+        }
+        return ips;
+    }
+    
+    // URL 추출
+    public List<String> extractUrls() {
+        List<String> urls = new ArrayList<>();
+        Pattern pattern = Pattern.compile("https?://[^\\s]+");
+        
+        for (String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                urls.add(matcher.group());
+            }
+        }
+        return urls;
+    }
+    
+    // 한글 이름 추출
+    public List<String> extractKoreanNames() {
+        List<String> names = new ArrayList<>();
+        Pattern pattern = Pattern.compile("[가-힣]{2,4}");
+        
+        for (String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                names.add(matcher.group());
+            }
+        }
+        return names;
+    }
+    
+    // 금액 추출
+    public List<String> extractPrices() {
+        List<String> prices = new ArrayList<>();
+        Pattern pattern = Pattern.compile("₩[\\d,]+");
+        
+        for (String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                prices.add(matcher.group());
+            }
+        }
+        return prices;
+    }
+}
+```
+
+
+
+#### 그룹 캡처 예제
+
+```java
+public class GroupCaptureParser extends RegexFileParser {
+    
+    public GroupCaptureParser(String fileName) {
+        super(fileName);
+    }
+    
+    // 날짜를 년, 월, 일로 분리
+    public void parseDatesWithGroups() {
+        Pattern pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
+        
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            Matcher matcher = pattern.matcher(line);
+            
+            while (matcher.find()) {
+                System.out.println("줄 " + (i + 1) + ":");
+                System.out.println("  전체 날짜: " + matcher.group(0));
+                System.out.println("  년: " + matcher.group(1));
+                System.out.println("  월: " + matcher.group(2));
+                System.out.println("  일: " + matcher.group(3));
+                System.out.println();
+            }
+        }
+    }
+    
+    // 이메일을 사용자명과 도메인으로 분리
+    public void parseEmailsWithGroups() {
+        Pattern pattern = Pattern.compile("\\b([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\\.[A-Z|a-z]{2,})\\b");
+        
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            Matcher matcher = pattern.matcher(line);
+            
+            while (matcher.find()) {
+                System.out.println("줄 " + (i + 1) + ":");
+                System.out.println("  전체 이메일: " + matcher.group(0));
+                System.out.println("  사용자명: " + matcher.group(1));
+                System.out.println("  도메인: " + matcher.group(2));
+                System.out.println();
+            }
+        }
+    }
+    
+    // 전화번호를 지역번호, 중간번호, 뒷번호로 분리
+    public void parsePhoneNumbersWithGroups() {
+        Pattern pattern = Pattern.compile("\\b(\\d{3})-(\\d{4})-(\\d{4})\\b");
+        
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            Matcher matcher = pattern.matcher(line);
+            
+            while (matcher.find()) {
+                System.out.println("줄 " + (i + 1) + ":");
+                System.out.println("  전체 전화번호: " + matcher.group(0));
+                System.out.println("  지역번호: " + matcher.group(1));
+                System.out.println("  중간번호: " + matcher.group(2));
+                System.out.println("  뒷번호: " + matcher.group(3));
+                System.out.println();
+            }
+        }
+    }
+}
+```
+
+
+
+#### 문자열 치환 예제
+
+```java
+public class StringReplacementParser extends RegexFileParser {
+    
+    public StringReplacementParser(String fileName) {
+        super(fileName);
+    }
+    
+    // 전화번호 형식 변경 (010-1234-5678 → 010.1234.5678)
+    public List<String> replacePhoneNumberFormat() {
+        List<String> replacedLines = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(\\d{3})-(\\d{4})-(\\d{4})");
+        
+        for (String line : lines) {
+            String replaced = pattern.matcher(line).replaceAll("$1.$2.$3");
+            replacedLines.add(replaced);
+        }
+        return replacedLines;
+    }
+    
+    // 이메일 마스킹 (test@example.com → t***@example.com)
+    public List<String> maskEmails() {
+        List<String> maskedLines = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\b([A-Za-z0-9._%+-])[A-Za-z0-9._%+-]*@([A-Za-z0-9.-]+\\.[A-Z|a-z]{2,})\\b");
+        
+        for (String line : lines) {
+            String masked = pattern.matcher(line).replaceAll("$1***@$2");
+            maskedLines.add(masked);
+        }
+        return maskedLines;
+    }
+    
+    // 날짜 형식 변경 (2024-01-15 → 2024년 1월 15일)
+    public List<String> formatDates() {
+        List<String> formattedLines = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
+        
+        for (String line : lines) {
+            String formatted = pattern.matcher(line).replaceAll("$1년 $2월 $3일");
+            formattedLines.add(formatted);
+        }
+        return formattedLines;
+    }
+}
+```
+
+
+
+#### 테스트
+
+```java
+public class RegexParsingMain {
+    public static void main(String[] args) {
+        // 테스트 파일 생성
+        createTestFile();
+        
+        // 패턴 파싱 테스트
+        PatternParser parser = new PatternParser("test_data.txt");
+        
+        System.out.println("=== 파일 내용 ===");
+        parser.printLines();
+        
+        System.out.println("\n=== 이메일 추출 ===");
+        parser.extractEmails().forEach(System.out::println);
+        
+        System.out.println("\n=== 전화번호 추출 ===");
+        parser.extractPhoneNumbers().forEach(System.out::println);
+        
+        System.out.println("\n=== 날짜 추출 ===");
+        parser.extractDates().forEach(System.out::println);
+        
+        System.out.println("\n=== IP 주소 추출 ===");
+        parser.extractIpAddresses().forEach(System.out::println);
+        
+        System.out.println("\n=== URL 추출 ===");
+        parser.extractUrls().forEach(System.out::println);
+        
+        System.out.println("\n=== 한글 이름 추출 ===");
+        parser.extractKoreanNames().forEach(System.out::println);
+        
+        System.out.println("\n=== 금액 추출 ===");
+        parser.extractPrices().forEach(System.out::println);
+        
+        // 그룹 캡처 테스트
+        GroupCaptureParser groupParser = new GroupCaptureParser("test_data.txt");
+        
+        System.out.println("\n=== 날짜 그룹 분리 ===");
+        groupParser.parseDatesWithGroups();
+        
+        System.out.println("\n=== 이메일 그룹 분리 ===");
+        groupParser.parseEmailsWithGroups();
+        
+        // 문자열 치환 테스트
+        StringReplacementParser replaceParser = new StringReplacementParser("test_data.txt");
+        
+        System.out.println("\n=== 전화번호 형식 변경 ===");
+        replaceParser.replacePhoneNumberFormat().forEach(System.out::println);
+        
+        System.out.println("\n=== 이메일 마스킹 ===");
+        replaceParser.maskEmails().forEach(System.out::println);
+        
+        System.out.println("\n=== 날짜 형식 변경 ===");
+        replaceParser.formatDates().forEach(System.out::println);
+    }
+    
+    // 테스트용 파일 생성
+    private static void createTestFile() {
+        try (PrintWriter writer = new PrintWriter("test_data.txt")) {
+            writer.println("홍길동의 이메일: hong@example.com");
+            writer.println("전화번호: 010-1234-5678");
+            writer.println("가입일: 2024-01-15");
+            writer.println("서버 IP: 192.168.1.100");
+            writer.println("웹사이트: https://www.example.com");
+            writer.println("김철수 회원님의 결제 금액: ₩50,000");
+            writer.println("로그 시간: 2024-02-20 14:30:25");
+            writer.println("관리자 이메일: admin@company.co.kr");
+            writer.println("긴급 연락처: 010-9876-5432");
+            writer.println("데이터베이스 주소: 10.0.0.1");
+            writer.println("박영희님의 주문 금액: ₩1,200,000");
+            writer.println("API 엔드포인트: https://api.service.com/v1/users");
+        } catch (IOException e) {
+            System.err.println("테스트 파일 생성 오류: " + e.getMessage());
+        }
+    }
+}
+```
+
+### 
+
+```java
+public class PracticeProblems {
+    
+    // 주민등록번호 추출 (앞자리만 표시)
+    public static List<String> extractMaskedSSN(String fileName) {
+        List<String> results = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(\\d{6})-\\d{7}");
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Matcher matcher = pattern.matcher(line);
+                while (matcher.find()) {
+                    results.add(matcher.group(1) + "-*******");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("파일 읽기 오류: " + e.getMessage());
+        }
+        return results;
+    }
+    
+    // 카드번호 추출 (마스킹 처리)
+    public static List<String> extractMaskedCardNumber(String fileName) {
+        List<String> results = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(\\d{4})-(\\d{4})-(\\d{4})-(\\d{4})");
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String masked = pattern.matcher(line).replaceAll("$1-****-****-$4");
+                if (!masked.equals(line)) {
+                    results.add(masked);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("파일 읽기 오류: " + e.getMessage());
+        }
+        return results;
+    }
+    
+    public static void main(String[] args) {
+        // 연습 문제 테스트
+        System.out.println("=== 주민등록번호 마스킹 ===");
+        extractMaskedSSN("practice_data.txt").forEach(System.out::println);
+        
+        System.out.println("\n=== 카드번호 마스킹 ===");
+        extractMaskedCardNumber("practice_data.txt").forEach(System.out::println);
     }
 }
 ```
