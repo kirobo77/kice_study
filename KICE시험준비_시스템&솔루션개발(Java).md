@@ -38,7 +38,60 @@
 
 
 
-### 전체 문항 구조 
+#### 시험 문항 java 프로젝트 구조
+
+- 압축파일 형태로 링크 다운로드
+
+  - 문제풀이 후 소스코드 다시 압축하여 업로드 필요
+
+- 압축파일은 3개의 시험문항별 Java 프로젝트 존재
+
+- 압축 해제 후 Eclpise Import 기능을 통해 프로젝트 로딩
+
+  - 프로젝트 설정정보가 있을 경우 
+    - Eclipse -> File -> Import -> General -> Existing Projects into Workspace -> 압축해제한 프로젝트 디렉토리 선택 -> Finish
+  - 프로젝트 설정정보가 없는 경우
+    - Eclipse -> New -> Java Project -> Project Name: 문항별 프로젝트명 입력, Location :  압축해제한 프로젝트 디렉토리 선택-> Finish 
+  - 라이브러리 추가 시
+    - Ecplise -> Package Explorer -> 추가할 라이브러리 우 클릭 ->  Build Path -> Add to Build Path
+
+- 각 Java 프로젝트 내 제공 라이브러리 및 파일이 존재
+
+- 프로젝트 내 소스코드는 Main문이 있는 하나의 파일만 제공
+
+- 프로젝트 디렉토리 구성
+
+  ```
+  .
+  ├── SP_TEST1
+  │   ├── DICTIONARY.TXT
+  │   └── src
+  │       └── SP_TEST.java
+  ├── SP_TEST2
+  │   ├── DICTIONARY.TXT
+  │   ├── STOPWORD.TXT
+  │   └── src
+  │       └── SP_TEST.java
+  └── SP_TEST3
+      ├── DICTIONARY.TXT
+      ├── MODELS.JSON
+      ├── STOPWORD.TXT
+      ├── lib
+      │   ├── gson-2.10.1.jar
+      │   ├── javax.servlet-api-3.1.0.jar
+      │   ├── jetty-client-9.4.53.v20231009.jar
+      │   ├── jetty-http-9.4.53.v20231009.jar
+      │   ├── jetty-io-9.4.53.v20231009.jar
+      │   ├── jetty-server-9.4.53.v20231009.jar
+      │   ├── jetty-servlet-9.4.53.v20231009.jar
+      │   └── jetty-util-9.4.53.v20231009.jar
+      └── src
+          └── SP_TEST.java
+  ```
+
+  
+
+### 시험 문항 풀이 구조 
 
 - **총 3문항**으로 구성, 3시간 내 소스코드 개발 및 제출 필요
 - **문항 간 연계**: 1번 → 2번 → 3번 순서로 점진적 개선, 선행 문항이 후속 문항의 기반이 됨
@@ -109,21 +162,29 @@
 
 - **1, 2번**: 콘솔 입/출력 결과를 샘플 결과 파일(CMP_CONSOLE.TXT)과 비교
 
+  - Eclpise 통한 검증
+
+    - Eclipse -> Package Explorer -> Main 문이 있는 Java 파일 우 클릭 ->   Run As -> Java Application 클릭
+
+  - Terminal 통한 검증
+
+    - Eclipse ->  Package Explorer -> 프로젝트 컨텍스트 메뉴 클릭 -> Show In Local Terminal -> Teminal 클릭 
+
   - 실행방법
 
     ```sh
     javac -cp ".;lib/*" -d . src/Exam.java & java -cp ".;lib/*" Exam
     ```
 
-    
-
 - **3번**: MOCK.EXE 프로그램을 통해 API 테스트 시나리오 자동 실행, 모든 시나리오 통과 시 "테스트에 성공했습니다!" 메시지 출력
+
 - **부분점수 없음**: 한 단계라도 오류 발생 시 후속 문항 전체 오류 처리
-- **전체 소스크드 압축해서 제출**
+
+- **전체 소스코드 압축해서 제출**
 
 
 
-#### 정책 및 참고 데이터 활용
+#### 정책 및 참고 데이터 제공
 
 - **정책/참고 데이터 파일**
   - 프로젝트 내 파일형태로 제공
@@ -132,7 +193,11 @@
   - MODELS.JSON: AI 모델 정보, 분류코드-분류결과 매핑, 모델별 API URL
   
 - **파일 내용 하드코딩 금지**, 반드시 파일 입출력 코드 구현
+  - 검증 시 사용하는 데이터 파일 내용 다름
+
 - **모든 경로는 상대경로**로 처리
+  - 실제 검증 시 디렉토리 다를 수 있음
+
 
 
 
@@ -227,7 +292,7 @@ public class JettyEmbeddedExample {
 Jetty 9의 HttpClient로 JSON 데이터를 POST로 전송하고 응답을 받는 예시.
 
 ```java
-javaimport org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.http.HttpHeader;
@@ -830,8 +895,8 @@ System.out.println(count); // 5
 
 #### 기본 사용법
 
-```
-javaString result = String.format("이름: %s, 나이: %d", "홍길동", 25);
+```java
+String result = String.format("이름: %s, 나이: %d", "홍길동", 25);
 System.out.println(result); // 출력: 이름: 홍길동, 나이: 25
 ```
 
@@ -855,8 +920,8 @@ System.out.println(result); // 출력: 이름: 홍길동, 나이: 25
 
 #### 자리수, 정렬, 소수점 지정
 
-```
-java// 최소 10자리, 오른쪽 정렬
+```java
+// 최소 10자리, 오른쪽 정렬
 System.out.println(String.format("%10s", "Java")); // "      Java"
 
 // 최소 10자리, 왼쪽 정렬
@@ -871,8 +936,8 @@ System.out.println(String.format("%04d", 7)); // "0007"
 
 #### 여러 값 포맷팅
 
-```
-javaString name = "Anna";
+```java
+String name = "Anna";
 int age = 20;
 double score = 95.1234;
 
@@ -882,8 +947,8 @@ System.out.println(info); // "이름: Anna, 나이: 20, 점수: 95.1"
 
 #### 날짜 및 시간 포맷팅
 
-```
-javaimport java.util.Date;
+```java
+import java.util.Date;
 
 Date now = new Date();
 String dateStr = String.format("%tF %tT", now, now); // "2025-07-14 11:22:00"
@@ -918,8 +983,8 @@ System.out.println(dateStr);
 
 가장 간단하게 **밀리초 단위**로 작업 시간을 측정할 수 있습니다.
 
-```
-javalong start = System.currentTimeMillis(); // 시작 시각 기록
+```java
+long start = System.currentTimeMillis(); // 시작 시각 기록
 
 // 측정할 작업 코드
 Thread.sleep(500); // 예시: 0.5초 대기
@@ -937,8 +1002,8 @@ System.out.println("작업 소요 시간: " + elapsed + "ms");
 
 **더 정밀한 측정**이 필요할 때는 `System.nanoTime()`을 사용합니다. 나노초 단위로 측정되며, 상대 시간 측정에 적합합니다.
 
-```
-javalong start = System.nanoTime(); // 시작 시각(나노초)
+```java
+long start = System.nanoTime(); // 시작 시각(나노초)
 
 for (int i = 0; i < 1000000; i++) {
     Math.sqrt(i); // 예시 작업
@@ -955,8 +1020,8 @@ System.out.println("작업 소요 시간: " + (elapsed / 1_000_000.0) + "ms");
 
 #### 예제(함수 실행 시간 측정)
 
-```
-javapublic static void main(String[] args) {
+```java
+public static void main(String[] args) {
     long start = System.nanoTime(); // 시작 시각
 
     doHeavyWork(); // 측정할 함수
@@ -983,8 +1048,8 @@ Java에서 파일을 읽고, 특정 구분자(Delimiter)로 데이터를 분리�
 
 아래는 `#` 구분자로 구성된 파일을 읽어 HashMap에 Key/Value로 저장하는 예시입니다.
 
-```
-javaimport java.io.*;
+```java
+import java.io.*;
 import java.util.*;
 
 public class FileToMapExample {
@@ -1036,8 +1101,8 @@ public class FileToMapExample {
 
 ##### 확장 예시: Value가 여러 개일 때(List로 저장)
 
-```
-javaMap<String, List<String>> multiMap = new HashMap<>();
+```java
+Map<String, List<String>> multiMap = new HashMap<>();
 String[] parts = line.split("#");
 if (parts.length >= 2) {
     String key = parts[0].trim();
@@ -1054,8 +1119,8 @@ Java에서 `Map<String, String>` 데이터를 파일로 저장하는 방법을 �
 
 각 Key/Value를 한 줄에 `"Key#Value"` 형식으로 저장하는 예시입니다.
 
-```
-javaimport java.io.*;
+```java
+import java.io.*;
 import java.util.*;
 
 public class MapToFileExample {
@@ -1093,8 +1158,8 @@ public class MapToFileExample {
 
 Java의 `Properties` 객체를 활용하면 Key/Value를 손쉽게 `.properties` 형식으로 저장할 수 있습니다.
 
-```
-javaimport java.io.*;
+```java
+import java.io.*;
 import java.util.*;
 
 public class MapToPropertiesFile {
@@ -1118,8 +1183,8 @@ public class MapToPropertiesFile {
 
 `Gson` 라이브러리를 사용하면 Map을 JSON 파일로 쉽게 저장할 수 있습니다.
 
-```
-javaimport com.google.gson.Gson;
+```java
+import com.google.gson.Gson;
 import java.io.*;
 import java.util.*;
 
@@ -1166,7 +1231,7 @@ Java에서 Thread는 멀티태스킹 및 병렬 처리가 필요한 상황에서
 
 ##### Thread 클래스 상속
 
-```
+```java
 java// Thread 클래스를 상속하여 스레드 구현
 public class MyThread extends Thread {
     @Override
@@ -1194,7 +1259,7 @@ public class ThreadExample1 {
 
 #####  Runnable 인터페이스 구현
 
-```
+```java
 java// Runnable 인터페이스를 구현하여 스레드 실행
 public class MyRunnable implements Runnable {
     @Override
@@ -1220,8 +1285,8 @@ public class ThreadExample2 {
 
 #### 실전 예제: 여러 Agent를 Thread로 병렬 실행
 
-```
-javaimport java.util.*;
+```java
+import java.util.*;
 
 class AgentWorker implements Runnable {
     private final String agentName;
@@ -1272,7 +1337,7 @@ public class MultiAgentThreadExample {
 
 #### 실전 예제: Callable & Future 기본 예제
 ```java
-javaimport java.util.concurrent.Callable;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -1320,7 +1385,7 @@ public class CallableFutureSample {
 #### 실전 예제: 여러 Agent의 결과를 Map에 모으는 예제
 
 ```java
-javaimport java.util.*;
+import java.util.*;
 import java.util.concurrent.*;
 
 class AgentWorker implements Callable<Integer> {
@@ -1372,8 +1437,8 @@ public class MultiAgentResultCollect {
 
 #### 실전 예제: CompletableFuture 기본 예제
 
-```
-javaimport java.util.concurrent.CompletableFuture;
+```java
+import java.util.concurrent.CompletableFuture;
 
 public class CompletableFutureBasic {
     public static void main(String[] args) {
@@ -1390,8 +1455,8 @@ public class CompletableFutureBasic {
 
 #### 실전 예제: CompletableFuture 여러 작업 병렬 실행 및 결과 결합
 
-```
-javaimport java.util.concurrent.CompletableFuture;
+```java
+import java.util.concurrent.CompletableFuture;
 
 public class CompletableFutureCombine {
     public static void main(String[] args) {
@@ -1408,8 +1473,8 @@ public class CompletableFutureCombine {
 
 #### 실전 예제: CompletableFuture 여러 작업을 동시에 실행하고 모두 완료될 때까지 대기
 
-```
-javaimport java.util.concurrent.CompletableFuture;
+```java
+import java.util.concurrent.CompletableFuture;
 import java.util.Arrays;
 import java.util.List;
 
@@ -1432,8 +1497,8 @@ public class CompletableFutureAllOf {
 
 #### 실전 예제: CompletableFuture 실전 예제: 예외 처리 예제
 
-```
-javaimport java.util.concurrent.CompletableFuture;
+```java
+import java.util.concurrent.CompletableFuture;
 
 public class CompletableFutureException {
     public static void main(String[] args) {
@@ -1449,8 +1514,8 @@ public class CompletableFutureException {
 
 #### 실전 예제: CompletableFuture 여러 Agent 작업 병렬 처리.
 
-```
-javaimport java.util.concurrent.*;
+```java
+import java.util.concurrent.*;
 import java.util.*;
 
 class AgentWorker implements Callable<Integer> {
@@ -1546,8 +1611,8 @@ public class MultiAgentCompletableFuture {
 
 #### 텍스트 파일 내 특정 패턴 추출 (예: 이메일 주소)
 
-```
-javaimport java.io.*;
+```java
+import java.io.*;
 import java.util.regex.*;
 
 public class EmailExtractor {
@@ -1576,8 +1641,8 @@ public class EmailExtractor {
 
 #### Key-Value 형식 데이터 파싱 (예: config 파일)
 
-```
-javaimport java.io.*;
+```java
+import java.io.*;
 import java.util.regex.*;
 
 public class ConfigParser {
@@ -1605,8 +1670,8 @@ public class ConfigParser {
 
 #### CSV 파일에서 특정 칼럼 추출 (콤마로 구분)
 
-```
-javaimport java.io.*;
+```java
+import java.io.*;
 import java.util.regex.*;
 
 public class CsvColumnParser {
@@ -1634,8 +1699,8 @@ public class CsvColumnParser {
 
 #### 로그 파일에서 날짜 및 오류 메시지 추출
 
-```
-javaimport java.io.*;
+```java
+import java.io.*;
 import java.util.regex.*;
 
 public class LogErrorParser {
@@ -1664,8 +1729,8 @@ public class LogErrorParser {
 
 #### XML 태그에서 데이터 추출 (단순 Tag)
 
-```
-javaimport java.io.*;
+```java
+import java.io.*;
 import java.util.regex.*;
 
 public class SimpleXmlParser {
@@ -2051,6 +2116,8 @@ public class PracticeProblems {
     }
 }
 ```
+
+
 
 ### 주요 알고리즘 
 
