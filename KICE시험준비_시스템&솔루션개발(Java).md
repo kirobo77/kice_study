@@ -1,4 +1,6 @@
-## KICE시험준비 시스템&솔루션개발(Java)
+## KICE 시험준비 시스템&솔루션개발(Java)
+
+## 소개
 
 ![image-20250714132454143](./images/image-20250714132454143.png)
 
@@ -748,9 +750,9 @@ public class SP_TEST {
 
 
 
-## 공통유틸
+## 공통 유틸
 
-### Java Stream
+### Stream
 
 Java Stream API는 Java 8부터 도입된 기능으로, 컬렉션(List, Set 등)이나 배열에 저장된 데이터를 함수형 스타일로 효율적이고 간결하게 처리할 수 있게 해줍니다. 데이터를 반복, 필터링, 매핑, 집계 등 다양한 연산을 손쉽게 수행할 수 있습니다.
 
@@ -889,11 +891,302 @@ System.out.println(count); // 5
 
 
 
-### String Format
+### String 
 
-`String.format`은 문자열을 원하는 형식(패턴)에 맞춰 동적으로 조립할 때 사용하는 Java 표준 메서드입니다. C 언어의 `printf`와 유사한 방식으로, 텍스트와 변수값을 손쉽게 결합할 수 있습니다.
+#### length() - 문자열 길이 반환
 
-#### 기본 사용법
+문자열의 길이를 반환합니다.
+
+java
+
+```java
+public class StringLengthExample {
+    public static void main(String[] args) {
+        String str = "Hello World";
+        System.out.println("문자열 길이: " + str.length()); // 출력: 11
+        
+        String empty = "";
+        System.out.println("빈 문자열 길이: " + empty.length()); // 출력: 0
+    }
+}
+```
+
+#### charAt(int index) - 특정 위치의 문자 반환
+
+지정된 인덱스 위치의 문자를 반환합니다.
+
+java
+
+```java
+public class CharAtExample {
+    public static void main(String[] args) {
+        String str = "Java Programming";
+        
+        System.out.println("첫 번째 문자: " + str.charAt(0)); // 출력: J
+        System.out.println("다섯 번째 문자: " + str.charAt(4)); // 출력: (공백)
+        
+        // 마지막 문자 접근
+        System.out.println("마지막 문자: " + str.charAt(str.length() - 1)); // 출력: g
+    }
+}
+```
+
+#### substring() - 부분 문자열 추출
+
+문자열의 일부를 추출합니다.
+
+java
+
+```java
+public class SubstringExample {
+    public static void main(String[] args) {
+        String str = "Hello World Java";
+        
+        // 시작 인덱스부터 끝까지
+        System.out.println(str.substring(6)); // 출력: World Java
+        
+        // 시작 인덱스부터 끝 인덱스 전까지
+        System.out.println(str.substring(0, 5)); // 출력: Hello
+        System.out.println(str.substring(6, 11)); // 출력: World
+    }
+}
+```
+
+#### indexOf() / lastIndexOf() - 문자열 검색
+
+특정 문자나 문자열의 위치를 찾습니다.
+
+java
+
+```java
+public class IndexOfExample {
+    public static void main(String[] args) {
+        String str = "Java is great, Java is powerful";
+        
+        // 첫 번째 발생 위치
+        System.out.println("Java의 첫 번째 위치: " + str.indexOf("Java")); // 출력: 0
+        System.out.println("is의 첫 번째 위치: " + str.indexOf("is")); // 출력: 5
+        
+        // 마지막 발생 위치
+        System.out.println("Java의 마지막 위치: " + str.lastIndexOf("Java")); // 출력: 15
+        
+        // 없는 문자열 검색
+        System.out.println("Python 위치: " + str.indexOf("Python")); // 출력: -1
+    }
+}
+```
+
+#### contains() - 문자열 포함 여부 확인
+
+문자열이 특정 문자열을 포함하는지 확인합니다.
+
+java
+
+```java
+public class ContainsExample {
+    public static void main(String[] args) {
+        String str = "Java Programming Language";
+        
+        System.out.println("Java 포함: " + str.contains("Java")); // 출력: true
+        System.out.println("Python 포함: " + str.contains("Python")); // 출력: false
+        System.out.println("Program 포함: " + str.contains("Program")); // 출력: true
+    }
+}
+```
+
+#### startsWith() / endsWith() - 시작/끝 문자열 확인
+
+문자열이 특정 문자열로 시작하거나 끝나는지 확인합니다.
+
+java
+
+```java
+public class StartsEndsWithExample {
+    public static void main(String[] args) {
+        String filename = "document.pdf";
+        String url = "https://www.example.com";
+        
+        System.out.println("PDF 파일인가: " + filename.endsWith(".pdf")); // 출력: true
+        System.out.println("HTTPS 프로토콜인가: " + url.startsWith("https")); // 출력: true
+        System.out.println("DOC 파일인가: " + filename.endsWith(".doc")); // 출력: false
+    }
+}
+```
+
+#### toUpperCase() / toLowerCase() - 대소문자 변환
+
+문자열을 대문자 또는 소문자로 변환합니다.
+
+java
+
+```java
+public class CaseConversionExample {
+    public static void main(String[] args) {
+        String str = "Hello World";
+        
+        System.out.println("대문자: " + str.toUpperCase()); // 출력: HELLO WORLD
+        System.out.println("소문자: " + str.toLowerCase()); // 출력: hello world
+        
+        // 원본 문자열은 변경되지 않음
+        System.out.println("원본: " + str); // 출력: Hello World
+    }
+}
+```
+
+#### trim() - 공백 제거
+
+문자열 양 끝의 공백을 제거합니다.
+
+java
+
+```java
+public class TrimExample {
+    public static void main(String[] args) {
+        String str = "  Hello World  ";
+        
+        System.out.println("원본: '" + str + "'"); // 출력: '  Hello World  '
+        System.out.println("trim 후: '" + str.trim() + "'"); // 출력: 'Hello World'
+        
+        // 중간 공백은 제거되지 않음
+        String str2 = "  Hello   World  ";
+        System.out.println("trim 후: '" + str2.trim() + "'"); // 출력: 'Hello   World'
+    }
+}
+```
+
+#### replace() / replaceAll() - 문자열 치환
+
+문자열을 다른 문자열로 치환합니다.
+
+java
+
+```java
+public class ReplaceExample {
+    public static void main(String[] args) {
+        String str = "Hello World Java World";
+        
+        // 모든 발생 치환
+        System.out.println(str.replace("World", "Universe")); 
+        // 출력: Hello Universe Java Universe
+        
+        // 정규식을 사용한 치환
+        String text = "Java123Python456";
+        System.out.println(text.replaceAll("\\d+", "-")); // 출력: Java-Python-
+        
+        // 첫 번째 발생만 치환
+        System.out.println(str.replaceFirst("World", "Universe")); 
+        // 출력: Hello Universe Java World
+    }
+}
+```
+
+#### split() - 문자열 분리
+
+구분자를 기준으로 문자열을 배열로 분리합니다.
+
+java
+
+```java
+public class SplitExample {
+    public static void main(String[] args) {
+        String str = "apple,banana,orange";
+        String[] fruits = str.split(",");
+        
+        for (String fruit : fruits) {
+            System.out.println(fruit); // apple, banana, orange 순서대로 출력
+        }
+        
+        // 정규식을 사용한 분리
+        String text = "Java123Python456C++";
+        String[] languages = text.split("\\d+");
+        
+        for (String lang : languages) {
+            System.out.println(lang); // Java, Python, C++ 순서대로 출력
+        }
+    }
+}
+```
+
+#### equals() / equalsIgnoreCase() - 문자열 비교
+
+문자열을 비교합니다.
+
+```java
+public class EqualsExample {
+    public static void main(String[] args) {
+        String str1 = "Hello";
+        String str2 = "Hello";
+        String str3 = "hello";
+        String str4 = new String("Hello");
+        
+        // 대소문자 구분 비교
+        System.out.println(str1.equals(str2)); // 출력: true
+        System.out.println(str1.equals(str3)); // 출력: false
+        System.out.println(str1.equals(str4)); // 출력: true
+        
+        // 대소문자 무시 비교
+        System.out.println(str1.equalsIgnoreCase(str3)); // 출력: true
+        
+        // == 연산자와의 차이
+        System.out.println(str1 == str2); // 출력: true (문자열 리터럴)
+        System.out.println(str1 == str4); // 출력: false (다른 객체)
+    }
+}
+```
+
+#### isEmpty() / isBlank() - 빈 문자열 확인
+
+문자열이 비어있는지 확인합니다.
+
+```java
+public class EmptyBlankExample {
+    public static void main(String[] args) {
+        String empty = "";
+        String spaces = "   ";
+        String text = "Hello";
+        
+        // isEmpty() - 길이가 0인지 확인
+        System.out.println("empty.isEmpty(): " + empty.isEmpty()); // 출력: true
+        System.out.println("spaces.isEmpty(): " + spaces.isEmpty()); // 출력: false
+        System.out.println("text.isEmpty(): " + text.isEmpty()); // 출력: false
+        
+        // isBlank() - 공백만 있거나 빈 문자열인지 확인 (Java 11+)
+        System.out.println("empty.isBlank(): " + empty.isBlank()); // 출력: true
+        System.out.println("spaces.isBlank(): " + spaces.isBlank()); // 출력: true
+        System.out.println("text.isBlank(): " + text.isBlank()); // 출력: false
+    }
+}
+```
+
+#### valueOf() - 다른 타입을 문자열로 변환
+
+다양한 타입의 값을 문자열로 변환합니다.
+
+```java
+public class ValueOfExample {
+    public static void main(String[] args) {
+        int number = 123;
+        boolean flag = true;
+        double decimal = 3.14;
+        char character = 'A';
+        
+        System.out.println("숫자: " + String.valueOf(number)); // 출력: 123
+        System.out.println("불린: " + String.valueOf(flag)); // 출력: true
+        System.out.println("실수: " + String.valueOf(decimal)); // 출력: 3.14
+        System.out.println("문자: " + String.valueOf(character)); // 출력: A
+        
+        // null 안전성
+        String nullStr = null;
+        System.out.println("null: " + String.valueOf(nullStr)); // 출력: null
+    }
+}
+```
+
+#### format() - 문자열 포맷팅
+
+형식화된 문자열을 생성합니다.
+
+기본 사용법
 
 ```java
 String result = String.format("이름: %s, 나이: %d", "홍길동", 25);
@@ -973,68 +1266,679 @@ System.out.println(dateStr);
 | `String.format("%-10s", "Hello")`             | "Hello "             |
 | `String.format("0x%X", 255)`                  | 0xFF                 |
 
+#### join() - 문자열 결합
 
-
-### 시간 측정
-
-작업 또는 코드 블록의 **실행 시간**을 측정하는 방법을 단계별로 안내합니다. Java 표준 API만 사용하며, 실무에서 가장 널리 쓰이는 방식입니다.
-
-#### System.currentTimeMillis() 
-
-가장 간단하게 **밀리초 단위**로 작업 시간을 측정할 수 있습니다.
+배열이나 컬렉션의 요소들을 구분자로 연결합니다.
 
 ```java
-long start = System.currentTimeMillis(); // 시작 시각 기록
+import java.util.Arrays;
+import java.util.List;
 
-// 측정할 작업 코드
-Thread.sleep(500); // 예시: 0.5초 대기
-
-long end = System.currentTimeMillis();   // 종료 시각 기록
-long elapsed = end - start;              // 경과 시간(밀리초)
-System.out.println("작업 소요 시간: " + elapsed + "ms");
+public class JoinExample {
+    public static void main(String[] args) {
+        // 배열 결합
+        String[] words = {"Java", "is", "awesome"};
+        String sentence = String.join(" ", words);
+        System.out.println(sentence); // 출력: Java is awesome
+        
+        // 리스트 결합
+        List<String> fruits = Arrays.asList("apple", "banana", "orange");
+        String fruitList = String.join(", ", fruits);
+        System.out.println(fruitList); // 출력: apple, banana, orange
+        
+        // 다양한 구분자
+        String hyphenated = String.join("-", "2024", "01", "01");
+        System.out.println(hyphenated); // 출력: 2024-01-01
+    }
+}
 ```
 
-| 메서드                   | 설명                        |
-| :----------------------- | :-------------------------- |
-| System.currentTimeMillis | 1970년 1월 1일부터의 밀리초 |
 
-#### System.nanoTime() 활용
 
-**더 정밀한 측정**이 필요할 때는 `System.nanoTime()`을 사용합니다. 나노초 단위로 측정되며, 상대 시간 측정에 적합합니다.
+### Date/Time
+
+#### 날짜 유틸리티 
 
 ```java
-long start = System.nanoTime(); // 시작 시각(나노초)
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 
-for (int i = 0; i < 1000000; i++) {
-    Math.sqrt(i); // 예시 작업
+public class DateUtils {
+    
+    private static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    
+    /**
+     * 현재 날짜를 문자열로 반환
+     */
+    public static String getCurrentDateString() {
+        return LocalDate.now().format(DEFAULT_FORMATTER);
+    }
+    
+    /**
+     * 현재 날짜시간을 문자열로 반환
+     */
+    public static String getCurrentDateTimeString() {
+        return LocalDateTime.now().format(DATETIME_FORMATTER);
+    }
+    
+    /**
+     * 두 날짜 사이의 일수 계산
+     */
+    public static long getDaysBetween(LocalDate startDate, LocalDate endDate) {
+        return ChronoUnit.DAYS.between(startDate, endDate);
+    }
+    
+    /**
+     * 나이 계산
+     */
+    public static int calculateAge(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
+    }
+    
+    /**
+     * 해당 월의 첫 번째 날
+     */
+    public static LocalDate getFirstDayOfMonth(LocalDate date) {
+        return date.with(TemporalAdjusters.firstDayOfMonth());
+    }
+    
+    /**
+     * 해당 월의 마지막 날
+     */
+    public static LocalDate getLastDayOfMonth(LocalDate date) {
+        return date.with(TemporalAdjusters.lastDayOfMonth());
+    }
+    
+    /**
+     * 다음 월요일 찾기
+     */
+    public static LocalDate getNextMonday(LocalDate date) {
+        return date.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+    }
+    
+    /**
+     * 평일인지 확인
+     */
+    public static boolean isWeekday(LocalDate date) {
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        return dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY;
+    }
+    
+    /**
+     * 업무일 추가 (주말 제외)
+     */
+    public static LocalDate addBusinessDays(LocalDate date, int days) {
+        LocalDate result = date;
+        int addedDays = 0;
+        
+        while (addedDays < days) {
+            result = result.plusDays(1);
+            if (isWeekday(result)) {
+                addedDays++;
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * 타임스탬프 생성
+     */
+    public static long getCurrentTimestamp() {
+        return Instant.now().getEpochSecond();
+    }
+    
+    /**
+     * 타임스탬프를 날짜로 변환
+     */
+    public static LocalDateTime timestampToLocalDateTime(long timestamp) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault());
+    }
+    
+    // 테스트 메서드
+    public static void main(String[] args) {
+        System.out.println("현재 날짜: " + getCurrentDateString());
+        System.out.println("현재 날짜시간: " + getCurrentDateTimeString());
+        
+        LocalDate today = LocalDate.now();
+        LocalDate birthday = LocalDate.of(1990, 5, 15);
+        
+        System.out.println("나이: " + calculateAge(birthday) + "세");
+        System.out.println("이번 달 첫날: " + getFirstDayOfMonth(today));
+        System.out.println("이번 달 마지막날: " + getLastDayOfMonth(today));
+        System.out.println("다음 월요일: " + getNextMonday(today));
+        System.out.println("오늘은 평일인가? " + isWeekday(today));
+        System.out.println("5 업무일 후: " + addBusinessDays(today, 5));
+        
+        long timestamp = getCurrentTimestamp();
+        System.out.println("현재 타임스탬프: " + timestamp);
+        System.out.println("타임스탬프를 날짜로: " + timestampToLocalDateTime(timestamp));
+    }
 }
-
-long end = System.nanoTime();   // 종료 시각(나노초)
-long elapsed = end - start;     // 경과 시간(나노초)
-System.out.println("작업 소요 시간: " + (elapsed / 1_000_000.0) + "ms");
 ```
 
-| 메서드          | 설명                       |
-| :-------------- | :------------------------- |
-| System.nanoTime | 나노초 단위 상대 시간 측정 |
-
-#### 예제(함수 실행 시간 측정)
+#### 날짜 범위 유틸리티
 
 ```java
-public static void main(String[] args) {
-    long start = System.nanoTime(); // 시작 시각
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
-    doHeavyWork(); // 측정할 함수
-
-    long end = System.nanoTime(); // 종료 시각
-    double elapsedMs = (end - start) / 1_000_000.0;
-    System.out.printf("함수 실행 시간: %.3fms%n", elapsedMs);
+public class DateValidationExample {
+    
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    
+    /**
+     * 날짜 문자열 유효성 검증
+     */
+    public static boolean isValidDate(String dateString) {
+        try {
+            LocalDate.parse(dateString, FORMATTER);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * 날짜가 특정 범위 내에 있는지 검증
+     */
+    public static boolean isDateInRange(LocalDate date, LocalDate startDate, LocalDate endDate) {
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
+    
+    /**
+     * 미래 날짜인지 확인
+     */
+    public static boolean isFutureDate(LocalDate date) {
+        return date.isAfter(LocalDate.now());
+    }
+    
+    /**
+     * 과거 날짜인지 확인
+     */
+    public static boolean isPastDate(LocalDate date) {
+        return date.isBefore(LocalDate.now());
+    }
+    
+    /**
+     * 18세 이상인지 확인
+     */
+    public static boolean isAdult(LocalDate birthDate) {
+        return calculateAge(birthDate) >= 18;
+    }
+    
+    private static int calculateAge(LocalDate birthDate) {
+        return LocalDate.now().getYear() - birthDate.getYear();
+    }
+    
+    public static void main(String[] args) {
+        // 날짜 유효성 검증 테스트
+        String[] testDates = {"2024-02-29", "2024-13-01", "2024-02-30", "2024-12-25"};
+        
+        for (String dateString : testDates) {
+            System.out.println(dateString + " 유효한가? " + isValidDate(dateString));
+        }
+        
+        // 날짜 범위 검증
+        LocalDate testDate = LocalDate.of(2024, 6, 15);
+        LocalDate startDate = LocalDate.of(2024, 1, 1);
+        LocalDate endDate = LocalDate.of(2024, 12, 31);
+        
+        System.out.println("날짜 범위 내에 있는가? " + isDateInRange(testDate, startDate, endDate));
+        
+        // 미래/과거 날짜 검증
+        LocalDate futureDate = LocalDate.now().plusDays(30);
+        LocalDate pastDate = LocalDate.now().minusDays(30);
+        
+        System.out.println("미래 날짜인가? " + isFutureDate(futureDate));
+        System.out.println("과거 날짜인가? " + isPastDate(pastDate));
+        
+        // 성인 여부 확인
+        LocalDate adultBirthDate = LocalDate.of(1990, 1, 1);
+        LocalDate minorBirthDate = LocalDate.of(2010, 1, 1);
+        
+        System.out.println("성인인가? " + isAdult(adultBirthDate));
+        System.out.println("미성년자인가? " + !isAdult(minorBirthDate));
+    }
 }
+```
 
-static void doHeavyWork() {
-    // 예시: 무거운 작업
-    for (int i = 0; i < 1000000; i++) {
-        Math.pow(i, 0.5);
+#### 날짜 변환 유틸리티
+
+```java
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+public class DateConversionUtils {
+    
+    /**
+     * LocalDate를 Date로 변환
+     */
+    public static Date localDateToDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+    
+    /**
+     * Date를 LocalDate로 변환
+     */
+    public static LocalDate dateToLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+    
+    /**
+     * LocalDateTime을 Date로 변환
+     */
+    public static Date localDateTimeToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+    
+    /**
+     * Date를 LocalDateTime으로 변환
+     */
+    public static LocalDateTime dateToLocalDateTime(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+    
+    /**
+     * LocalDateTime을 Timestamp로 변환
+     */
+    public static long localDateTimeToTimestamp(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+    }
+    
+    /**
+     * Timestamp를 LocalDateTime으로 변환
+     */
+    public static LocalDateTime timestampToLocalDateTime(long timestamp) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault());
+    }
+    
+    /**
+     * 문자열을 LocalDate로 변환 (여러 포맷 지원)
+     */
+    public static LocalDate parseDate(String dateString) {
+        DateTimeFormatter[] formatters = {
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("yyyy/MM/dd"),
+            DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        };
+        
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                return LocalDate.parse(dateString, formatter);
+            } catch (Exception e) {
+                // 다음 포맷터 시도
+            }
+        }
+        
+        throw new IllegalArgumentException("지원되지 않는 날짜 형식: " + dateString);
+    }
+    
+    /**
+     * LocalDate를 다양한 형식의 문자열로 변환
+     */
+    public static String formatDate(LocalDate date, String pattern) {
+        return date.format(DateTimeFormatter.ofPattern(pattern));
+    }
+    
+    public static void main(String[] args) {
+        // 변환 테스트
+        LocalDate localDate = LocalDate.of(2024, 12, 25);
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 12, 25, 14, 30, 45);
+        
+        // LocalDate <-> Date
+        Date dateFromLocal = localDateToDate(localDate);
+        LocalDate localFromDate = dateToLocalDate(dateFromLocal);
+        
+        System.out.println("LocalDate -> Date: " + dateFromLocal);
+        System.out.println("Date -> LocalDate: " + localFromDate);
+        
+        // LocalDateTime <-> Date
+        Date dateFromDateTime = localDateTimeToDate(localDateTime);
+        LocalDateTime dateTimeFromDate = dateToLocalDateTime(dateFromDateTime);
+        
+        System.out.println("LocalDateTime -> Date: " + dateFromDateTime);
+        System.out.println("Date -> LocalDateTime: " + dateTimeFromDate);
+        
+        // Timestamp 변환
+        long timestamp = localDateTimeToTimestamp(localDateTime);
+        LocalDateTime dateTimeFromTimestamp = timestampToLocalDateTime(timestamp);
+        
+        System.out.println("LocalDateTime -> Timestamp: " + timestamp);
+        System.out.println("Timestamp -> LocalDateTime: " + dateTimeFromTimestamp);
+        
+        // 문자열 파싱 테스트
+        String[] testDates = {"2024-12-25", "2024/12/25", "25-12-2024", "25/12/2024"};
+        
+        for (String dateString : testDates) {
+            try {
+                LocalDate parsed = parseDate(dateString);
+                System.out.println("파싱된 날짜 (" + dateString + "): " + parsed);
+            } catch (Exception e) {
+                System.out.println("파싱 실패: " + dateString);
+            }
+        }
+        
+        // 포맷팅 테스트
+        String[] patterns = {
+            "yyyy-MM-dd",
+            "yyyy년 MM월 dd일",
+            "MMM dd, yyyy",
+            "E, MMM dd yyyy"
+        };
+        
+        for (String pattern : patterns) {
+            System.out.println("포맷 (" + pattern + "): " + formatDate(localDate, pattern));
+        }
+    }
+}
+```
+
+#### 달력 유틸리티
+
+```java
+import java.time.*;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CalendarUtils {
+    
+    /**
+     * 특정 월의 모든 날짜를 반환
+     */
+    public static List<LocalDate> getDatesInMonth(int year, int month) {
+        List<LocalDate> dates = new ArrayList<>();
+        LocalDate firstDay = LocalDate.of(year, month, 1);
+        LocalDate lastDay = firstDay.with(TemporalAdjusters.lastDayOfMonth());
+        
+        LocalDate current = firstDay;
+        while (!current.isAfter(lastDay)) {
+            dates.add(current);
+            current = current.plusDays(1);
+        }
+        
+        return dates;
+    }
+    
+    /**
+     * 특정 월의 평일만 반환
+     */
+    public static List<LocalDate> getWeekdaysInMonth(int year, int month) {
+        return getDatesInMonth(year, month).stream()
+            .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY && 
+                           date.getDayOfWeek() != DayOfWeek.SUNDAY)
+            .collect(ArrayList::new, (list, item) -> list.add(item), (list1, list2) -> list1.addAll(list2));
+    }
+    
+    /**
+     * 특정 월의 주말만 반환
+     */
+    public static List<LocalDate> getWeekendsInMonth(int year, int month) {
+        return getDatesInMonth(year, month).stream()
+            .filter(date -> date.getDayOfWeek() == DayOfWeek.SATURDAY || 
+                           date.getDayOfWeek() == DayOfWeek.SUNDAY)
+            .collect(ArrayList::new, (list, item) -> list.add(item), (list1, list2) -> list1.addAll(list2));
+    }
+    
+    /**
+     * 특정 월의 특정 요일들을 반환
+     */
+    public static List<LocalDate> getSpecificDayOfWeekInMonth(int year, int month, DayOfWeek dayOfWeek) {
+        return getDatesInMonth(year, month).stream()
+            .filter(date -> date.getDayOfWeek() == dayOfWeek)
+            .collect(ArrayList::new, (list, item) -> list.add(item), (list1, list2) -> list1.addAll(list2));
+    }
+    
+    /**
+     * 분기별 첫 번째 날과 마지막 날 반환
+     */
+    public static LocalDate[] getQuarterRange(int year, int quarter) {
+        if (quarter < 1 || quarter > 4) {
+            throw new IllegalArgumentException("분기는 1-4 사이여야 합니다.");
+        }
+        
+        int startMonth = (quarter - 1) * 3 + 1;
+        LocalDate startDate = LocalDate.of(year, startMonth, 1);
+        LocalDate endDate = startDate.plusMonths(2).with(TemporalAdjusters.lastDayOfMonth());
+        
+        return new LocalDate[]{startDate, endDate};
+    }
+    
+    /**
+     * 해당 연도의 모든 월 이름 반환
+     */
+    public static List<String> getMonthNames() {
+        List<String> months = new ArrayList<>();
+        for (Month month : Month.values()) {
+            months.add(month.toString());
+        }
+        return months;
+    }
+    
+    /**
+     * 윤년 여부 확인
+     */
+    public static boolean isLeapYear(int year) {
+        return Year.isLeap(year);
+    }
+    
+    /**
+     * 특정 년도의 총 일수 반환
+     */
+    public static int getDaysInYear(int year) {
+        return Year.of(year).length();
+    }
+    
+    public static void main(String[] args) {
+        int year = 2024;
+        int month = 12;
+        
+        // 해당 월의 모든 날짜
+        List<LocalDate> allDates = getDatesInMonth(year, month);
+        System.out.println(year + "년 " + month + "월의 총 일수: " + allDates.size());
+        
+        // 평일과 주말 개수
+        List<LocalDate> weekdays = getWeekdaysInMonth(year, month);
+        List<LocalDate> weekends = getWeekendsInMonth(year, month);
+        
+        System.out.println("평일 개수: " + weekdays.size());
+        System.out.println("주말 개수: " + weekends.size());
+        
+        // 특정 요일들
+        List<LocalDate> mondays = getSpecificDayOfWeekInMonth(year, month, DayOfWeek.MONDAY);
+        System.out.println("월요일들: " + mondays);
+        
+        // 분기별 범위
+        for (int quarter = 1; quarter <= 4; quarter++) {
+            LocalDate[] range = getQuarterRange(year, quarter);
+            System.out.println(quarter + "분기: " + range[0] + " ~ " + range[1]);
+        }
+        
+        // 월 이름들
+        System.out.println("월 이름들: " + getMonthNames());
+        
+        // 윤년 여부
+        System.out.println(year + "년은 윤년인가? " + isLeapYear(year));
+        System.out.println(year + "년의 총 일수: " + getDaysInYear(year));
+    }
+}
+```
+
+#### 시간 측정 및 성능 유틸리티
+
+```java
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
+
+public class TimePerformanceUtils {
+    
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = 
+        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    
+    /**
+     * 실행 시간 측정 클래스
+     */
+    public static class StopWatch {
+        private Instant startTime;
+        private Instant endTime;
+        private boolean running = false;
+        
+        public void start() {
+            this.startTime = Instant.now();
+            this.running = true;
+        }
+        
+        public void stop() {
+            this.endTime = Instant.now();
+            this.running = false;
+        }
+        
+        public long getElapsedTimeMillis() {
+            if (running) {
+                return Duration.between(startTime, Instant.now()).toMillis();
+            }
+            return Duration.between(startTime, endTime).toMillis();
+        }
+        
+        public long getElapsedTimeSeconds() {
+            if (running) {
+                return Duration.between(startTime, Instant.now()).getSeconds();
+            }
+            return Duration.between(startTime, endTime).getSeconds();
+        }
+        
+        public Duration getElapsedTime() {
+            if (running) {
+                return Duration.between(startTime, Instant.now());
+            }
+            return Duration.between(startTime, endTime);
+        }
+        
+        public String getFormattedElapsedTime() {
+            Duration elapsed = getElapsedTime();
+            long hours = elapsed.toHours();
+            long minutes = elapsed.toMinutes() % 60;
+            long seconds = elapsed.getSeconds() % 60;
+            long millis = elapsed.toMillis() % 1000;
+            
+            return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
+        }
+        
+        public boolean isRunning() {
+            return running;
+        }
+    }
+    
+    /**
+     * 메서드 실행 시간 측정
+     */
+    public static <T> T measureExecutionTime(String operationName, java.util.function.Supplier<T> operation) {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        
+        try {
+            T result = operation.get();
+            stopWatch.stop();
+            System.out.println(operationName + " 실행 시간: " + stopWatch.getFormattedElapsedTime());
+            return result;
+        } catch (Exception e) {
+            stopWatch.stop();
+            System.out.println(operationName + " 실행 중 오류 발생. 소요 시간: " + stopWatch.getFormattedElapsedTime());
+            throw e;
+        }
+    }
+    
+    /**
+     * 현재 시간을 포맷된 문자열로 반환
+     */
+    public static String getCurrentTimestamp() {
+        return LocalDateTime.now().format(TIMESTAMP_FORMATTER);
+    }
+    
+    /**
+     * 시간 단위 변환
+     */
+    public static long convertTime(long time, TimeUnit fromUnit, TimeUnit toUnit) {
+        return toUnit.convert(time, fromUnit);
+    }
+    
+    /**
+     * 두 시간 사이의 차이를 다양한 단위로 반환
+     */
+    public static void printTimeDifference(Instant start, Instant end) {
+        Duration duration = Duration.between(start, end);
+        
+        System.out.println("시간 차이:");
+        System.out.println("  밀리초: " + duration.toMillis());
+        System.out.println("  초: " + duration.getSeconds());
+        System.out.println("  분: " + duration.toMinutes());
+        System.out.println("  시간: " + duration.toHours());
+        System.out.println("  일: " + duration.toDays());
+    }
+    
+    /**
+     * 시스템 시간과 UTC 시간 비교
+     */
+    public static void compareSystemAndUTCTime() {
+        LocalDateTime systemTime = LocalDateTime.now();
+        LocalDateTime utcTime = LocalDateTime.now(ZoneId.of("UTC"));
+        
+        System.out.println("시스템 시간: " + systemTime.format(TIMESTAMP_FORMATTER));
+        System.out.println("UTC 시간: " + utcTime.format(TIMESTAMP_FORMATTER));
+        
+        Duration difference = Duration.between(utcTime, systemTime);
+        System.out.println("시차: " + difference.toHours() + "시간");
+    }
+    
+    public static void main(String[] args) {
+        // StopWatch 테스트
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        
+        // 시뮬레이션된 작업
+        try {
+            Thread.sleep(1500); // 1.5초 대기
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        stopWatch.stop();
+        System.out.println("작업 완료 시간: " + stopWatch.getFormattedElapsedTime());
+        
+        // 메서드 실행 시간 측정
+        String result = measureExecutionTime("문자열 처리", () -> {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 100000; i++) {
+                sb.append("test");
+            }
+            return sb.toString();
+        });
+        
+        System.out.println("처리된 문자열 길이: " + result.length());
+        
+        // 현재 타임스탬프
+        System.out.println("현재 타임스탬프: " + getCurrentTimestamp());
+        
+        // 시간 단위 변환
+        long millis = 5000;
+        System.out.println(millis + "ms = " + convertTime(millis, TimeUnit.MILLISECONDS, TimeUnit.SECONDS) + "초");
+        
+        // 시간 차이 계산
+        Instant start = Instant.now().minusSeconds(3600); // 1시간 전
+        Instant end = Instant.now();
+        printTimeDifference(start, end);
+        
+        // 시스템 시간과 UTC 시간 비교
+        compareSystemAndUTCTime();
     }
 }
 ```
@@ -2119,7 +3023,7 @@ public class PracticeProblems {
 
 
 
-### 주요 알고리즘 
+### 주요 알고리즘 예제
 
 ####  로드 밸런싱 알고리즘
 
