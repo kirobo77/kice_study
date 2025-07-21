@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class ConsoleMaskingApp {
+public class ConsoleMaskingSample {
 
     private static final String MASK_POLICY_FILE = "mask_policy.txt"; // 마스킹 정책 파일(샘플: "이름#1-2")
     private static final String MASKED_DATA_FILE = "masked_data.txt"; // 마스킹 변환 결과 저장 파일
