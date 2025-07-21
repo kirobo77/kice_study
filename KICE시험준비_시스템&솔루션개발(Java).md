@@ -3030,7 +3030,7 @@ public class PracticeProblems {
 - **라운드 로빈**: 요청을 순차적으로 서버에 분배
 - **가중치 라운드 로빈**: 서버 성능에 따라 가중치를 부여하여 분배
 - **활용**: API Gateway, 마이크로서비스 간 통신, 클라우드 인스턴스 분산
-- **샘플코드**
+- ##### **샘플코드**
 
   ```java
   import java.util.ArrayList;
@@ -3240,12 +3240,12 @@ public class PracticeProblems {
 
 
 
-####  일관된 해싱 (Consistent Hashing)
+####  일관된 해싱
 
 - **특징**: 노드 추가/제거 시 최소한의 데이터 재분배
 - **가상 노드**: 부하 분산을 위한 가상 노드 구현
 - **활용**: 분산 캐시, 샤딩, CDN 노드 선택
-- **샘플코드**
+- ##### **샘플코드**
 
   ```java
   import java.util.HashSet;
@@ -3400,7 +3400,7 @@ public class PracticeProblems {
 - **서킷 브레이커**: 장애 전파 방지 및 자동 복구
 - **하트비트 모니터링**: 노드 상태 실시간 감지
 - **활용**: 마이크로서비스 간 통신, 분산 시스템 안정성
-- **샘플코드**
+- ##### **샘플코드**
 
   ```java
   import java.util.Map;
@@ -3694,7 +3694,7 @@ public class PracticeProblems {
 
 - **해시 기반 파티셔닝**: 키를 기반으로 데이터 분산
 - **활용**: 데이터베이스 샤딩, 분산 스토리지
-- **샘플코드**
+- ##### **샘플코드**
 
   ```java
   import java.util.ArrayList;
@@ -3825,7 +3825,7 @@ public class PracticeProblems {
 - **Producer-Consumer 패턴**: 비동기 메시지 처리
 - **백프레셔 제어**: 큐 크기 제한을 통한 메모리 관리
 - **활용**: 이벤트 기반 아키텍처, 배치 처리
-- **샘플코드**
+- ##### **샘플코드**
 
   ```java
   import java.util.LinkedList;
@@ -4028,7 +4028,7 @@ public class PracticeProblems {
 - **이동 평균**: 실시간 메트릭 평활화
 - **임계값 알림**: 자동 알림 시스템
 - **활용**: 시스템 모니터링, 자동 스케일링
-- **샘플코드**
+- ##### **샘플코드**
 
   ```java
   import java.util.HashMap;
