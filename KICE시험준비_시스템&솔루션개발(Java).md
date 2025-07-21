@@ -2399,7 +2399,7 @@ public class CompletableFutureAllOf {
 }
 ```
 
-#### 실전 예제: CompletableFuture 실전 예제: 예외 처리 예제
+#### 실전 예제: CompletableFuture 예외 처리 예제
 
 ```java
 import java.util.concurrent.CompletableFuture;
