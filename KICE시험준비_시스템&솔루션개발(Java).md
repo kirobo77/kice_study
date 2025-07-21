@@ -40,7 +40,7 @@
 
 
 
-#### 시험 문항 프로젝트 구조
+### 시험 문항 프로젝트 구조
 
 - 압축파일 형태로 링크 다운로드
 
@@ -3238,11 +3238,25 @@ public class PracticeProblems {
 
 - **특징**: 노드 추가/제거 시 최소한의 데이터 재분배
 - **가상 노드**: 부하 분산을 위한 가상 노드 구현
+
+  - 해시 공간 (Hash Space)
+    - 일반적으로 0 ~ 2³²-1의 정수 범위를 사용하는 원형 공간.
+
+   - 해시 링 (Hash Ring)
+     - 해시 공간을 원형 구조로 연결한 것. 맨 끝과 처음이 연결되어 순환 구조를 이룸.
+
+   - 키-서버 매핑
+     - 키와 서버 모두 해시 함수를 통해 링에 위치시킨다.
+     - 키는 자신보다 해시값이 큰 첫 번째 서버에 매핑된다 (시계 방향 탐색).
+
 - **활용**: 분산 캐시, 샤딩, CDN 노드 선택
 - ##### **샘플코드**
 
   ```java
+  import java.security.MessageDigest;
+  import java.security.NoSuchAlgorithmException;
   import java.util.HashSet;
+  import java.util.Iterator;
   import java.util.Map;
   import java.util.Set;
   import java.util.TreeMap;
@@ -3251,61 +3265,65 @@ public class PracticeProblems {
    * Cloud/On-Premise 환경에서 요구되는 핵심 알고리즘 구현
    * 
    * 분산 캐싱 알고리즘 (Consistent Hashing)
+   * 
    */
   public class ConsistentHashingSample {
-  
-      // ===== 분산 캐싱 알고리즘 (Consistent Hashing) =====
       
-      /**
-       * 일관된 해싱을 구현하는 클래스
-       */
       static class ConsistentHashRing {
-          private TreeMap<Integer, String> ring;
+          private TreeMap<Long, String> ring;
           private Set<String> nodes;
           private int virtualNodeCount;
+          private MessageDigest md5;
           
-          public ConsistentHashRing(int virtualNodeCount) {
+          public AdvancedConsistentHashRing(int virtualNodeCount) {
               this.ring = new TreeMap<>();
               this.nodes = new HashSet<>();
               this.virtualNodeCount = virtualNodeCount;
+              try {
+                  this.md5 = MessageDigest.getInstance("MD5");
+              } catch (NoSuchAlgorithmException e) {
+                  throw new RuntimeException("MD5 알고리즘을 찾을 수 없습니다", e);
+              }
           }
           
           /**
-           * 노드를 링에 추가하는 메소드
+           * 노드 추가 - 다양한 키 전략 사용
            */
           public void addNode(String node) {
               nodes.add(node);
+              
               for (int i = 0; i < virtualNodeCount; i++) {
-                  String virtualNode = node + "#" + i;
-                  int hash = calculateHash(virtualNode);
-                  ring.put(hash, node);
+                  String virtualNode1 = node + "#vnode#" + i;
+                  long hash1 = calculateMD5Hash(virtualNode1);
+                  ring.put(hash1, node);
               }
           }
           
           /**
-           * 노드를 링에서 제거하는 메소드
+           * 노드 제거
            */
           public void removeNode(String node) {
               nodes.remove(node);
-              for (int i = 0; i < virtualNodeCount; i++) {
-                  String virtualNode = node + "#" + i;
-                  int hash = calculateHash(virtualNode);
-                  ring.remove(hash);
+              
+              // 해당 노드의 모든 가상 노드 제거
+              Iterator<Map.Entry<Long, String>> iterator = ring.entrySet().iterator();
+              while (iterator.hasNext()) {
+                  Map.Entry<Long, String> entry = iterator.next();
+                  if (entry.getValue().equals(node)) {
+                      iterator.remove();
+                  }
               }
           }
           
           /**
-           * 키에 대한 노드를 찾는 메소드
+           * 키에 대한 노드 찾기
            */
           public String getNode(String key) {
               if (ring.isEmpty()) return null;
               
-              int hash = calculateHash(key);
+              long hash = calculateMD5Hash(key);
+              Map.Entry<Long, String> entry = ring.ceilingEntry(hash);
               
-              // 해시보다 큰 첫 번째 노드를 찾음
-              Map.Entry<Integer, String> entry = ring.ceilingEntry(hash);
-              
-              // 찾지 못하면 링의 첫 번째 노드를 반환 (순환 구조)
               if (entry == null) {
                   entry = ring.firstEntry();
               }
@@ -3314,22 +3332,22 @@ public class PracticeProblems {
           }
           
           /**
-           * 해시 함수 (간단한 해시 구현)
+           * MD5 기반 해시 함수 (더 균등한 분산)
            */
-          private int calculateHash(String input) {
-              return input.hashCode();
-          }
-          
-          /**
-           * 현재 링 상태를 출력하는 메소드
-           */
-          public void printRing() {
-              System.out.println("=== Consistent Hash Ring ===");
-              for (Map.Entry<Integer, String> entry : ring.entrySet()) {
-                  System.out.println("Hash: " + entry.getKey() + " -> Node: " + entry.getValue());
+          private long calculateMD5Hash(String input) {
+              md5.reset();
+              md5.update(input.getBytes());
+              byte[] digest = md5.digest();
+              
+              long hash = 0;
+              for (int i = 0; i < 8; i++) {
+                  hash <<= 8;
+                  hash |= ((int) digest[i]) & 0xFF;
               }
+              
+              return hash;
           }
-      }	
+      }
       
       /**
        * 일관된 해싱 테스트
@@ -3361,7 +3379,6 @@ public class PracticeProblems {
               System.out.println("Key: " + key + " -> Node: " + node);
           }
           
-          System.out.println();
       }
       
       /**
@@ -3381,10 +3398,8 @@ public class PracticeProblems {
           }
           
           System.out.println("일관된 해싱 테스트 테스트 완료");
-      }    
-  	
+      }   
   }
-  
   ```
 
 
