@@ -3039,17 +3039,12 @@ public class PracticeProblems {
   /**
    * Cloud/On-Premise 환경에서 요구되는 핵심 알고리즘 구현
    * 
-   * 포함된 알고리즘:
-   * 1. 로드 밸런싱 알고리즘 (라운드 로빈, 가중치 라운드 로빈)
-   * 2. 분산 캐싱 알고리즘 (Consistent Hashing)
-   * 3. 장애 감지 알고리즘 (Heartbeat with Circuit Breaker)
-   * 4. 데이터 파티셔닝 알고리즘 (Hash-based Partitioning)
-   * 5. 메시지 큐 알고리즘 (Producer-Consumer Pattern)
-   * 6. 리소스 모니터링 알고리즘 (Moving Average)
+   *  로드 밸런싱 알고리즘 (라운드 로빈, 가중치 라운드 로빈)
    */
   public class LoadBalancerSample {
   
-  	// ===== 1. 로드 밸런싱 알고리즘 =====
+  	// ===== 로드 밸런싱 알고리즘 =====
+  	
       /**
        * 서버 정보를 담는 클래스
        */
@@ -3234,7 +3229,6 @@ public class PracticeProblems {
           System.out.println("로드 밸런서 테스트 완료");
       }    
   }
-  
   ```
   
 
@@ -3710,7 +3704,7 @@ public class PracticeProblems {
    */
   public class DataPartitioningSample {
   
-      // ===== 4. 데이터 파티셔닝 알고리즘 =====
+      // ===== 데이터 파티셔닝 알고리즘 =====
       
       /**
        * 해시 기반 파티셔닝 클래스
@@ -3838,7 +3832,7 @@ public class PracticeProblems {
    */
   public class MessageQueueSample {
   
-      // ===== 5. 메시지 큐 알고리즘 =====
+      // ===== 메시지 큐 알고리즘 =====
       
       /**
        * 간단한 메시지 큐 구현
@@ -4045,7 +4039,7 @@ public class PracticeProblems {
    */
   public class ResourceMonitoringSample {
   
-      // ===== 6. 리소스 모니터링 알고리즘 =====
+      // ===== 리소스 모니터링 알고리즘 =====
       
       /**
        * 이동 평균을 계산하는 클래스

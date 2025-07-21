@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class DataPartitioningSample {
 
-    // ===== 4. 데이터 파티셔닝 알고리즘 =====
+    // ===== 데이터 파티셔닝 알고리즘 =====
     
     /**
      * 해시 기반 파티셔닝 클래스

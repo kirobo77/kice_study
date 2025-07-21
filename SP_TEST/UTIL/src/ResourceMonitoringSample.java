@@ -12,7 +12,7 @@ import java.util.TimerTask;
  */
 public class ResourceMonitoringSample {
 
-    // ===== 6. 리소스 모니터링 알고리즘 =====
+    // ===== 리소스 모니터링 알고리즘 =====
     
     /**
      * 이동 평균을 계산하는 클래스

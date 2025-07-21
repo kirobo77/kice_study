@@ -8,7 +8,7 @@ import java.util.Queue;
  */
 public class MessageQueueSample {
 
-    // ===== 5. 메시지 큐 알고리즘 =====
+    // ===== 메시지 큐 알고리즘 =====
     
     /**
      * 간단한 메시지 큐 구현
