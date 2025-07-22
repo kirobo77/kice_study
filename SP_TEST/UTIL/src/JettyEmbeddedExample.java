@@ -17,13 +17,45 @@ public class JettyEmbeddedExample {
 
     // 간단한 Hello 서블릿 구현
     public static class HelloServlet extends HttpServlet {
-        @Override
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		@Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, java.io.IOException {
+			
+	        String requestURL = req.getRequestURL().toString();
+	        String requestURI = req.getRequestURI();
+	        String contextPath = req.getContextPath();
+	        String servletPath = req.getServletPath();
+	        String queryString = req.getQueryString();
+	        
+	        System.out.println("Request URL: " + requestURL);
+	        System.out.println("Request URI: " + requestURI);
+	        System.out.println("Context Path: " + contextPath);
+	        System.out.println("Servlet Path: " + servletPath);
+	        System.out.println("Query String: " + queryString);
+	        
             resp.setContentType("text/plain; charset=utf-8");
             resp.getWriter().write("[GET]Hello, Jetty Embedded!");
+
         }
         @Override
         protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, java.io.IOException {
+	        
+	        String requestURL = req.getRequestURL().toString();
+	        String requestURI = req.getRequestURI();
+	        String contextPath = req.getContextPath();
+	        String servletPath = req.getServletPath();
+	        String queryString = req.getQueryString();
+	        
+	        System.out.println("Request URL: " + requestURL);
+	        System.out.println("Request URI: " + requestURI);
+	        System.out.println("Context Path: " + contextPath);
+	        System.out.println("Servlet Path: " + servletPath);
+	        System.out.println("Query String: " + queryString);
+	        
             resp.setContentType("application/json; charset=utf-8");
             resp.getWriter().write("[POST]Hello, Jetty Embedded!");
         }        
