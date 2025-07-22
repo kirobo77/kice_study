@@ -2361,6 +2361,8 @@ if (parts.length >= 2) {
 }
 ```
 
+
+
 #### File 쓰기
 
 Java에서 `Map<String, String>` 데이터를 파일로 저장하는 방법을 단계별로 설명합니다. 일반적으로 **텍스트 파일**에 Key/Value 쌍을 한 줄씩 기록하거나, **Properties 파일** 또는 **JSON 파일**로 저장할 수 있습니다.
@@ -2463,9 +2465,11 @@ public class MapToJsonFile {
 }
 ```
 
+
+
 ### Java Thread 
 
-Java에서 Thread는 멀티태스킹 및 병렬 처리가 필요한 상황에서 매우 중요한 역할을 합니다. 아래는 Java Thread의 기본 개념, 주요 메소드, 실전 예제, 그리고 실무에서 자주 쓰는 패턴을 포함한 사용 가이드입니다.
+Java에서 Thread는 멀티태스킹 및 병렬 처리가 필요한 상황에서 매우 중요한 역할을 합니다. 아래는 Java Thread의 기본 개념, 주요 메소드, 예제, 그리고 실무에서 자주 쓰는 패턴을 포함한 사용 가이드입니다.
 
 ####  Thread의 기본 개념
 
@@ -2475,6 +2479,8 @@ Java에서 Thread는 멀티태스킹 및 병렬 처리가 필요한 상황에서
 - **Thread 생성 방법**
   - `Thread` 클래스를 상속
   - `Runnable` 인터페이스 구현
+
+
 
 ####  Thread 관련 주요 메소드
 
@@ -2486,6 +2492,8 @@ Java에서 Thread는 멀티태스킹 및 병렬 처리가 필요한 상황에서
 | join()      | 다른 스레드가 종료될 때까지 대기 |
 | interrupt() | 스레드에 인터럽트 신호 전달      |
 | isAlive()   | 스레드가 실행 중인지 확인        |
+
+
 
 #### Thread 기본 샘플 코드
 
@@ -2542,7 +2550,9 @@ public class ThreadExample2 {
 }
 ```
 
-#### 실전 예제: 여러 Agent를 Thread로 병렬 실행
+
+
+#### 예제: 여러 Agent를 Thread로 병렬 실행
 
 ```java
 import java.util.ArrayList;
@@ -2597,7 +2607,10 @@ public class MultiAgentThreadExample {
 }
 ```
 
-#### 실전 예제: Callable & Future 기본 예제
+
+
+#### 예제: Callable & Future 기본
+
 ```java
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -2644,7 +2657,7 @@ public class CallableFutureSample {
 }
 ```
 
-#### 실전 예제: 여러 Agent의 결과를 Map에 모으는 예제
+#### 예제: 여러 Agent의 결과를 Map에 저장
 
 ```java
 import java.util.HashMap;
@@ -2703,7 +2716,7 @@ public class MultiAgentResultCollect {
 }
 ```
 
-#### 실전 예제: CompletableFuture 기본 예제
+#### 예제: CompletableFuture 기본
 
 ```java
 import java.util.concurrent.CompletableFuture;
@@ -2721,7 +2734,7 @@ public class CompletableFutureBasic {
 }
 ```
 
-#### 실전 예제: CompletableFuture 여러 작업 병렬 실행 및 결과 결합
+#### 예제: CompletableFuture 여러 작업 병렬 실행 및 결과 결합
 
 ```java
 import java.util.concurrent.CompletableFuture;
@@ -2739,7 +2752,7 @@ public class CompletableFutureCombine {
 }
 ```
 
-#### 실전 예제: CompletableFuture 여러 작업을 동시에 실행하고 모두 완료될 때까지 대기
+#### 예제: CompletableFuture 여러 작업을 동시에 실행하고 모두 완료될 때까지 대기
 
 ```java
 import java.util.concurrent.CompletableFuture;
@@ -2763,7 +2776,7 @@ public class CompletableFutureAllOf {
 }
 ```
 
-#### 실전 예제: CompletableFuture 예외 처리 예제
+#### 예제: CompletableFuture 예외 처리
 
 ```java
 import java.util.concurrent.CompletableFuture;
@@ -2780,7 +2793,7 @@ public class CompletableFutureException {
 }
 ```
 
-#### 실전 예제: CompletableFuture 여러 Agent 작업 병렬 처리.
+#### 예제: CompletableFuture 여러 Agent 작업 병렬 처리
 
 ```java
 import java.util.concurrent.*;
@@ -3034,7 +3047,7 @@ public class SimpleXmlParser {
 }
 ```
 
-#### 
+
 
 #### 파일기반 처리
 
@@ -3479,7 +3492,7 @@ public class RegexParsingTest {
 
 ### 주요 알고리즘 예제
 
-####  로드 밸런싱 알고리즘
+####  로드 밸런싱
 
 - **라운드 로빈**: 요청을 순차적으로 서버에 분배
 - **가중치 라운드 로빈**: 서버 성능에 따라 가중치를 부여하여 분배
@@ -3718,7 +3731,7 @@ public class RegexParsingTest {
   /**
    * Cloud/On-Premise 환경에서 요구되는 핵심 알고리즘 구현
    * 
-   * 분산 캐싱 알고리즘 (Consistent Hashing)
+   * 일관된 캐싱 알고리즘 (Consistent Hashing)
    * 
    */
   public class ConsistentHashingSample {
@@ -3858,7 +3871,7 @@ public class RegexParsingTest {
 
 
 
-#### 장애 감지 알고리즘
+#### 장애 감지 
 
 - **서킷 브레이커**: 장애 전파 방지 및 자동 복구
 - **하트비트 모니터링**: 노드 상태 실시간 감지
@@ -3875,7 +3888,7 @@ public class RegexParsingTest {
   /**
    * Cloud/On-Premise 환경에서 요구되는 핵심 알고리즘 구현
    * 
-   * 장애 감지 알고리즘  알고리즘 (Heartbeat with Circuit Breaker)
+   * 장애 감지 알고리즘 (Heartbeat with Circuit Breaker)
    */
   public class CircuitBreakerSample {
   
@@ -4283,7 +4296,7 @@ public class RegexParsingTest {
 
 
 
-#### 메시지 큐 시스템
+#### 메시지 큐 
 
 - **Producer-Consumer 패턴**: 비동기 메시지 처리
 - **백프레셔 제어**: 큐 크기 제한을 통한 메모리 관리
