@@ -1,7 +1,19 @@
-import com.google.gson.Gson;
 import java.io.FileReader;
-import java.util.*;
-import java.util.concurrent.*;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 // 메인 클래스
 public class ThreadDistributedWorker {
@@ -64,12 +76,14 @@ public class ThreadDistributedWorker {
 	// 정책 파일 로드
 	public static Map<String, Integer> loadAllocations(String path) throws Exception {
 		Gson gson = new Gson();
-		Map<String, Double> temp = gson.fromJson(new FileReader(path), Map.class);
-		Map<String, Integer> result = new HashMap<>();
-		for (Map.Entry<String, Double> entry : temp.entrySet()) {
-			result.put(entry.getKey(), entry.getValue().intValue());
+		try (FileReader reader = new FileReader(path)) {
+		    Type mapType = new TypeToken<Map<String, Integer>>(){}.getType();
+		    Map<String, Integer> result = gson.fromJson(reader, mapType);
+		    return result;
+		} catch (IOException e) {
+		    e.printStackTrace();
 		}
-		return result;
+		return null;
 	}
 
 	public static void main(String[] args) throws Exception {

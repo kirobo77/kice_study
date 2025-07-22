@@ -18,17 +18,18 @@ public class ConsoleUnmaskingApp {
     }
 
     public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("언마스킹할 고객명 입력: ");
-        String name = sc.nextLine();
+        try (Scanner sc = new Scanner(System.in)) {
+			System.out.print("언마스킹할 고객명 입력: ");
+			String name = sc.nextLine();
 
-        String filePath = "original_data.txt";
-        String originalData = loadOriginalData(name, filePath);
+			String filePath = "original_data.txt";
+			String originalData = loadOriginalData(name, filePath);
 
-        if (originalData != null) {
-            System.out.println("원본 데이터: " + originalData);
-        } else {
-            System.out.println("해당 고객의 원본 데이터가 없습니다.");
-        }
+			if (originalData != null) {
+			    System.out.println("원본 데이터: " + originalData);
+			} else {
+			    System.out.println("해당 고객의 원본 데이터가 없습니다.");
+			}
+		}
     }
 }

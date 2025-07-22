@@ -16,28 +16,29 @@ public class ConsoleMaskingSample {
 
     public static void main(String[] args) throws Exception {
         System.out.println("입력값(이름,전화번호,이메일): ");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine(); // 예: 홍길동,01012345678,abc@naver.com
-        String[] fields = input.split(",");
+        try (Scanner scanner = new Scanner(System.in)) {
+			String input = scanner.nextLine(); // 예: 홍길동,01012345678,abc@naver.com
+			String[] fields = input.split(",");
 
-        Map<String, String> policy = loadMaskPolicy();
-        Map<String, String> masked = new HashMap<>();
+			Map<String, String> policy = loadMaskPolicy();
+			Map<String, String> masked = new HashMap<>();
 
-        LocalDateTime start = LocalDateTime.now();
+			LocalDateTime start = LocalDateTime.now();
 
-        // 필드에 따른 마스킹 처리 (정책적용)
-        for (int i = 0; i < fields.length; i++) {
-            String value = fields[i];
-            String type = getFieldType(i); // 예시: 0=이름, 1=전화번호, 2=이메일 등
-            masked.put(type, maskValue(value, policy.get(type)));
-        }
+			// 필드에 따른 마스킹 처리 (정책적용)
+			for (int i = 0; i < fields.length; i++) {
+			    String value = fields[i];
+			    String type = getFieldType(i); // 예시: 0=이름, 1=전화번호, 2=이메일 등
+			    masked.put(type, maskValue(value, policy.get(type)));
+			}
 
-        // 결과 출력 및 저장
-        System.out.println("마스킹 결과: " + masked);
-        saveMapToFile(masked, MASKED_DATA_FILE);
-        LocalDateTime end = LocalDateTime.now();
+			// 결과 출력 및 저장
+			System.out.println("마스킹 결과: " + masked);
+			saveMapToFile(masked, MASKED_DATA_FILE);
+			LocalDateTime end = LocalDateTime.now();
 
-        System.out.println("작업 수행 시간(ms): " + Duration.between(start, end).toMillis());
+			System.out.println("작업 수행 시간(ms): " + Duration.between(start, end).toMillis());
+		}
     }
 
     // 정책 파일 읽기: "이름#1-2" 형식

@@ -9,6 +9,7 @@ public class JsonTreeExample {
         JsonElement element = JsonParser.parseString(json);
         JsonObject object = element.getAsJsonObject();
         long id = object.get("id").getAsLong();
+        System.out.println("id: " + id);
         JsonArray students = object.get("students").getAsJsonArray();
         for (JsonElement stu : students) {
             System.out.println(stu.getAsString());
