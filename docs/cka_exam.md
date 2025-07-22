@@ -18,6 +18,40 @@
      시험 후기들의 기출문제가 생각보다 많고,
      그리고 중요한 것은 기출문제가 거의 똑같았다.**
 
+### [시험 문제](https://nayoungs.tistory.com/entry/CKACertified-Kubernetes-Administrator-%ED%95%A9%EA%B2%A9-%EB%B0%8F-%EC%8B%9C%ED%97%98-%ED%9B%84%EA%B8%B0#%EC%-B%-C%ED%--%--%--%EB%AC%B-%EC%A-%-C)
+
+기억나는 대로 작성해보면 다음과 같다.
+
+1. 특정 Node가 Not Ready 상태이고, Ready 상태가 되도록 TroubleShooting하기
+
+```properties
+#고득점 문제이니, 반드시 맞추자.
+ssh node01
+systemctl status kubelet
+systemctl restart kubelet
+```
+
+2. Cluster Upgrade 하라. 이때 Controlplane Node만 업그레이드를 진행하기
+3. ETCD Snapshot Save & Restore
+4. PVC 생성 후 Pod와 PVC를 연동(mount)하기
+5. Log를 저장하는 Sidecar 컨테이너를 추가하여, Multi Container로 구성하기
+6. 특정 노드에 Pod가 배포되도록 하기 : nodeSelector, nodeName 모두 가능하다.
+7. nginx:1.16 이미지로 Deployment 생성 후, nginx:1.17로 업그레이드
+
+```routeros
+kubectl set image deployment test-depoy nginx=nginx:1.17
+```
+
+8. Networkpolicy를 생성해서, 특정 Namespace의 Pod만 특정 Pod로의 Ingress를 허용하기
+9. ServiceAccount, Role, Rolebinding 생성하기
+10. 특정 Node를 drain해서 Pod를 다른 노드로 옮기고 SchedulingDisabled 상태로 만들기
+11. Pod에서 ‘File Not Found’ log를 grep로 추출해서 파일로 저장하기
+12. CPU 사용률이 가장 높은 Pod를 특정 label로 조회해서 파일로 저장하기
+
+ 
+
+
+
  
 
 ### ㅁ 시험 시 팁
