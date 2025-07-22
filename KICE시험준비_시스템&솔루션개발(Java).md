@@ -173,7 +173,7 @@
 
   - Terminal 통한 검증
 
-    - Eclipse ->  Package Explorer -> 프로젝트 컨텍스트 메뉴 클릭 -> Show In Local Terminal -> Teminal 클릭 
+    - Eclipse -> Package Explorer -> 프로젝트 컨텍스트 메뉴 클릭 -> Show In Local Terminal -> Teminal 클릭 
 
   - 실행방법
 
@@ -301,8 +301,6 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.http.HttpHeader;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 public class JettyHttpClientExample {
     public static void main(String[] args) throws Exception {
@@ -385,7 +383,10 @@ public class GsonFromJsonExample {
 ##### JsonObject/JsonArray 직접 다루기
 
 ```java
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class JsonTreeExample {
     public static void main(String[] args) {
@@ -457,8 +458,14 @@ flowchart TD
 #### 실행 코드
 
 ```java
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class SP_TEST {
     // 단어 사전 저장용 Map
@@ -529,8 +536,16 @@ flowchart TD
 #### 실행 코드 (불용어 처리 추가)
 
 ```java
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 public class SP_TEST {
     private static final Map<String, String> dictionary = new HashMap<>();
@@ -611,19 +626,33 @@ flowchart TD
 #### Jetty + Gson 활용 예시 코드
 
 ```java
-import com.google.gson.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.client.util.StringContentProvider;
+import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
-import javax.servlet.http.*;
-import javax.servlet.*;
-import org.eclipse.jetty.client.*;
-import org.eclipse.jetty.client.api.*;
-import org.eclipse.jetty.client.util.*;
-import org.eclipse.jetty.http.*;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class SP_TEST {
     private static final Map<String, String> dictionary = new HashMap<>();
@@ -838,8 +867,9 @@ System.out.println(sum); // 15
 문자열 리스트에서 조건에 맞는 요소 추출 및 가공
 
 ```java
-import java.util.*;
-import java.util.stream.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StreamExample {
     public static void main(String[] args) {
@@ -863,8 +893,8 @@ public class StreamExample {
 숫자 리스트에서 짝수만 제곱하여 합계 구하기
 
 ```java
-import java.util.*;
-import java.util.stream.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class StreamNumberExample {
     public static void main(String[] args) {
@@ -900,8 +930,6 @@ System.out.println(count); // 5
 
 문자열의 길이를 반환합니다.
 
-java
-
 ```java
 public class StringLengthExample {
     public static void main(String[] args) {
@@ -917,8 +945,6 @@ public class StringLengthExample {
 #### charAt(int index) - 특정 위치의 문자 반환
 
 지정된 인덱스 위치의 문자를 반환합니다.
-
-java
 
 ```java
 public class CharAtExample {
@@ -938,8 +964,6 @@ public class CharAtExample {
 
 문자열의 일부를 추출합니다.
 
-java
-
 ```java
 public class SubstringExample {
     public static void main(String[] args) {
@@ -958,8 +982,6 @@ public class SubstringExample {
 #### indexOf() / lastIndexOf() - 문자열 검색
 
 특정 문자나 문자열의 위치를 찾습니다.
-
-java
 
 ```java
 public class IndexOfExample {
@@ -983,8 +1005,6 @@ public class IndexOfExample {
 
 문자열이 특정 문자열을 포함하는지 확인합니다.
 
-java
-
 ```java
 public class ContainsExample {
     public static void main(String[] args) {
@@ -1000,8 +1020,6 @@ public class ContainsExample {
 #### startsWith() / endsWith() - 시작/끝 문자열 확인
 
 문자열이 특정 문자열로 시작하거나 끝나는지 확인합니다.
-
-java
 
 ```java
 public class StartsEndsWithExample {
@@ -1019,8 +1037,6 @@ public class StartsEndsWithExample {
 #### toUpperCase() / toLowerCase() - 대소문자 변환
 
 문자열을 대문자 또는 소문자로 변환합니다.
-
-java
 
 ```java
 public class CaseConversionExample {
@@ -1040,8 +1056,6 @@ public class CaseConversionExample {
 
 문자열 양 끝의 공백을 제거합니다.
 
-java
-
 ```java
 public class TrimExample {
     public static void main(String[] args) {
@@ -1060,8 +1074,6 @@ public class TrimExample {
 #### replace() / replaceAll() - 문자열 치환
 
 문자열을 다른 문자열로 치환합니다.
-
-java
 
 ```java
 public class ReplaceExample {
@@ -1086,8 +1098,6 @@ public class ReplaceExample {
 #### split() - 문자열 분리
 
 구분자를 기준으로 문자열을 배열로 분리합니다.
-
-java
 
 ```java
 public class SplitExample {
@@ -1617,21 +1627,17 @@ public class HashSetMapSample {
 
 
 
-
-
-
-
 ### Date/Time
 
 #### 날짜 유틸리티 
 
 ```java
-import java.time.*;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
-public class DateUtils {
+public class DateUtil {
     
     private static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -1746,6 +1752,8 @@ public class DateUtils {
 }
 ```
 
+
+
 #### 날짜 범위 유틸리티
 
 ```java
@@ -1753,7 +1761,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class DateValidationExample {
+public class DateValidationUtil {
     
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
@@ -1833,14 +1841,19 @@ public class DateValidationExample {
 }
 ```
 
+
+
 #### 날짜 변환 유틸리티
 
 ```java
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-public class DateConversionUtils {
+public class DateConversionUtil {
     
     /**
      * LocalDate를 Date로 변환
@@ -1967,15 +1980,20 @@ public class DateConversionUtils {
 }
 ```
 
+
+
 #### 달력 유틸리티
 
 ```java
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalendarUtils {
+public class CalendarUtil {
     
     /**
      * 특정 월의 모든 날짜를 반환
@@ -2098,14 +2116,16 @@ public class CalendarUtils {
 }
 ```
 
+
+
 #### 시간 측정 및 성능 유틸리티
 
 ```java
-import java.time.*;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
-public class TimePerformanceUtils {
+public class TimePerformanceUtil {
     
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = 
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
@@ -2350,8 +2370,11 @@ Java에서 `Map<String, String>` 데이터를 파일로 저장하는 방법을 �
 각 Key/Value를 한 줄에 `"Key#Value"` 형식으로 저장하는 예시입니다.
 
 ```java
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapToFileExample {
     public static void main(String[] args) throws IOException {
@@ -2389,8 +2412,11 @@ public class MapToFileExample {
 Java의 `Properties` 객체를 활용하면 Key/Value를 손쉽게 `.properties` 형식으로 저장할 수 있습니다.
 
 ```java
-import java.io.*;
-import java.util.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class MapToPropertiesFile {
     public static void main(String[] args) throws IOException {
@@ -2414,9 +2440,13 @@ public class MapToPropertiesFile {
 `Gson` 라이브러리를 사용하면 Map을 JSON 파일로 쉽게 저장할 수 있습니다.
 
 ```java
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gson.Gson;
-import java.io.*;
-import java.util.*;
 
 public class MapToJsonFile {
     public static void main(String[] args) throws IOException {
@@ -2462,24 +2492,23 @@ Java에서 Thread는 멀티태스킹 및 병렬 처리가 필요한 상황에서
 ##### Thread 클래스 상속
 
 ```java
-java// Thread 클래스를 상속하여 스레드 구현
-public class MyThread extends Thread {
-    @Override
-    public void run() {
-        // 스레드가 실행할 작업
-        for (int i = 0; i < 5; i++) {
-            System.out.println("MyThread 실행: " + i);
-            try {
-                Thread.sleep(500); // 0.5초 대기
-            } catch (InterruptedException e) {
-                System.out.println("인터럽트 발생");
-            }
-        }
-    }
-}
-
-// 실행 예시
 public class ThreadExample1 {
+	// Thread 클래스를 상속하여 스레드 구현
+	public static class MyThread extends Thread {
+	    @Override
+	    public void run() {
+	        // 스레드가 실행할 작업
+	        for (int i = 0; i < 5; i++) {
+	            System.out.println("MyThread 실행: " + i);
+	            try {
+	                Thread.sleep(500); // 0.5초 대기
+	            } catch (InterruptedException e) {
+	                System.out.println("인터럽트 발생");
+	            }
+	        }
+	    }
+	}
+	
     public static void main(String[] args) {
         MyThread thread = new MyThread();
         thread.start(); // 스레드 시작
@@ -2490,22 +2519,22 @@ public class ThreadExample1 {
 #####  Runnable 인터페이스 구현
 
 ```java
-java// Runnable 인터페이스를 구현하여 스레드 실행
-public class MyRunnable implements Runnable {
-    @Override
-    public void run() {
-        for (int i = 0; i < 5; i++) {
-            System.out.println("MyRunnable 실행: " + i);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                System.out.println("인터럽트 발생");
-            }
-        }
-    }
-}
-
 public class ThreadExample2 {
+	// Runnable 인터페이스를 구현하여 스레드 실행
+	public static class MyRunnable implements Runnable {
+	    @Override
+	    public void run() {
+	        for (int i = 0; i < 5; i++) {
+	            System.out.println("MyRunnable 실행: " + i);
+	            try {
+	                Thread.sleep(500);
+	            } catch (InterruptedException e) {
+	                System.out.println("인터럽트 발생");
+	            }
+	        }
+	    }
+	}
+	
     public static void main(String[] args) {
         Thread thread = new Thread(new MyRunnable());
         thread.start();
@@ -2516,30 +2545,33 @@ public class ThreadExample2 {
 #### 실전 예제: 여러 Agent를 Thread로 병렬 실행
 
 ```java
-import java.util.*;
-
-class AgentWorker implements Runnable {
-    private final String agentName;
-    private final int taskCount;
-    private final int input;
-
-    public AgentWorker(String agentName, int taskCount, int input) {
-        this.agentName = agentName;
-        this.taskCount = taskCount;
-        this.input = input;
-    }
-
-    @Override
-    public void run() {
-        int result = 0;
-        for (int i = 0; i < taskCount; i++) {
-            result += (input + i);
-        }
-        System.out.println(agentName + " 작업 완료: " + result);
-    }
-}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MultiAgentThreadExample {
+	
+	static class AgentWorker implements Runnable {
+	    private final String agentName;
+	    private final int taskCount;
+	    private final int input;
+
+	    public AgentWorker(String agentName, int taskCount, int input) {
+	        this.agentName = agentName;
+	        this.taskCount = taskCount;
+	        this.input = input;
+	    }
+
+	    @Override
+	    public void run() {
+	        int result = 0;
+	        for (int i = 0; i < taskCount; i++) {
+	            result += (input + i);
+	        }
+	        System.out.println(agentName + " 작업 완료: " + result);
+	    }
+	}
+	
     public static void main(String[] args) {
         // 각 Agent별 할당량
         Map<String, Integer> policy = Map.of("A", 50, "B", 30, "C", 20);
@@ -2568,32 +2600,32 @@ public class MultiAgentThreadExample {
 #### 실전 예제: Callable & Future 기본 예제
 ```java
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-// Callable을 구현하여 결과값 반환
-class SumTask implements Callable<Integer> {
-    private final int start;
-    private final int count;
-
-    public SumTask(int start, int count) {
-        this.start = start;
-        this.count = count;
-    }
-
-    @Override
-    public Integer call() {
-        int sum = 0;
-        for (int i = 0; i < count; i++) {
-            sum += (start + i);
-        }
-        return sum;
-    }
-}
-
 public class CallableFutureSample {
+	
+	// Callable을 구현하여 결과값 반환
+	static class SumTask implements Callable<Integer> {
+	    private final int start;
+	    private final int count;
+
+	    public SumTask(int start, int count) {
+	        this.start = start;
+	        this.count = count;
+	    }
+
+	    @Override
+	    public Integer call() {
+	        int sum = 0;
+	        for (int i = 0; i < count; i++) {
+	            sum += (start + i);
+	        }
+	        return sum;
+	    }
+	}
+	
     public static void main(String[] args) throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(3);
 
@@ -2615,32 +2647,38 @@ public class CallableFutureSample {
 #### 실전 예제: 여러 Agent의 결과를 Map에 모으는 예제
 
 ```java
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-class AgentWorker implements Callable<Integer> {
-    private final String agentName;
-    private final int taskCount;
-    private final int input;
-
-    public AgentWorker(String agentName, int taskCount, int input) {
-        this.agentName = agentName;
-        this.taskCount = taskCount;
-        this.input = input;
-    }
-
-    @Override
-    public Integer call() {
-        int result = 0;
-        for (int i = 0; i < taskCount; i++) {
-            result += (input + i);
-        }
-        System.out.println(agentName + " 작업 완료: " + result);
-        return result;
-    }
-}
 
 public class MultiAgentResultCollect {
+	
+	static class AgentWorker implements Callable<Integer> {
+	    private final String agentName;
+	    private final int taskCount;
+	    private final int input;
+
+	    public AgentWorker(String agentName, int taskCount, int input) {
+	        this.agentName = agentName;
+	        this.taskCount = taskCount;
+	        this.input = input;
+	    }
+
+	    @Override
+	    public Integer call() {
+	        int result = 0;
+	        for (int i = 0; i < taskCount; i++) {
+	            result += (input + i);
+	        }
+	        System.out.println(agentName + " 작업 완료: " + result);
+	        return result;
+	    }
+	}
+	
     public static void main(String[] args) throws Exception {
         Map<String, Integer> policy = Map.of("A", 50, "B", 30, "C", 20);
         int input = 100;
@@ -2842,8 +2880,11 @@ public class MultiAgentCompletableFuture {
 #### 텍스트 파일 내 특정 패턴 추출 (예: 이메일 주소)
 
 ```java
-import java.io.*;
-import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EmailExtractor {
     public static void main(String[] args) throws IOException {
@@ -2872,8 +2913,11 @@ public class EmailExtractor {
 #### Key-Value 형식 데이터 파싱 (예: config 파일)
 
 ```java
-import java.io.*;
-import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConfigParser {
     public static void main(String[] args) throws IOException {
@@ -2901,8 +2945,9 @@ public class ConfigParser {
 #### CSV 파일에서 특정 칼럼 추출 (콤마로 구분)
 
 ```java
-import java.io.*;
-import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class CsvColumnParser {
     public static void main(String[] args) throws IOException {
@@ -2930,8 +2975,11 @@ public class CsvColumnParser {
 #### 로그 파일에서 날짜 및 오류 메시지 추출
 
 ```java
-import java.io.*;
-import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LogErrorParser {
     public static void main(String[] args) throws IOException {
@@ -2960,8 +3008,11 @@ public class LogErrorParser {
 #### XML 태그에서 데이터 추출 (단순 Tag)
 
 ```java
-import java.io.*;
-import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SimpleXmlParser {
     public static void main(String[] args) throws IOException {
@@ -2983,11 +3034,131 @@ public class SimpleXmlParser {
 }
 ```
 
+#### 
 
+#### 파일기반 처리
+
+```java
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class RegexFileParser {
+    protected String fileName;
+    protected List<String> lines;
+    
+    public RegexFileParser(String fileName) {
+        this.fileName = fileName;
+        this.lines = new ArrayList<>();
+        loadFile();
+    }
+    
+    /**
+     * 파일을 읽어서 lines 리스트에 저장
+     */
+    private void loadFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            System.err.println("파일을 읽는 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 파일이 성공적으로 로드되었는지 확인
+     * @return 파일 로드 성공 여부
+     */
+    public boolean isFileLoaded() {
+        return !lines.isEmpty();
+    }
+    
+    /**
+     * 로드된 파일의 전체 라인 수 반환
+     * @return 라인 수
+     */
+    public int getLineCount() {
+        return lines.size();
+    }
+    
+    /**
+     * 특정 라인 반환
+     * @param lineNumber 라인 번호 (0부터 시작)
+     * @return 해당 라인의 문자열, 범위를 벗어나면 null
+     */
+    public String getLine(int lineNumber) {
+        if (lineNumber >= 0 && lineNumber < lines.size()) {
+            return lines.get(lineNumber);
+        }
+        return null;
+    }
+    
+    /**
+     * 모든 라인을 하나의 문자열로 결합
+     * @return 전체 파일 내용
+     */
+    public String getAllContent() {
+        StringBuilder content = new StringBuilder();
+        for (String line : lines) {
+            content.append(line).append("\n");
+        }
+        return content.toString();
+    }
+    
+    /**
+     * 특정 문자열이 포함된 라인들을 반환
+     * @param searchText 검색할 문자열
+     * @return 해당 문자열이 포함된 라인들의 리스트
+     */
+    public List<String> findLinesContaining(String searchText) {
+        List<String> matchingLines = new ArrayList<>();
+        for (String line : lines) {
+            if (line.contains(searchText)) {
+                matchingLines.add(line);
+            }
+        }
+        return matchingLines;
+    }
+    
+    /**
+     * 파일명 반환
+     * @return 파일명
+     */
+    public String getFileName() {
+        return fileName;
+    }
+    
+    /**
+     * 파일을 다시 로드
+     */
+    public void reloadFile() {
+        lines.clear();
+        loadFile();
+    }
+    
+    /**
+     * 파일 정보 출력
+     */
+    public void printFileInfo() {
+        System.out.println("파일명: " + fileName);
+        System.out.println("전체 라인 수: " + getLineCount());
+        System.out.println("파일 로드 상태: " + (isFileLoaded() ? "성공" : "실패"));
+    }
+}
+```
 
 #### 다양한 패턴별 파싱 예제
 
 ```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class PatternParser extends RegexFileParser {
     
     public PatternParser(String fileName) {
@@ -3091,6 +3262,7 @@ public class PatternParser extends RegexFileParser {
         }
         return prices;
     }
+    
 }
 ```
 
@@ -3099,6 +3271,9 @@ public class PatternParser extends RegexFileParser {
 #### 그룹 캡처 예제
 
 ```java
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class GroupCaptureParser extends RegexFileParser {
     
     public GroupCaptureParser(String fileName) {
@@ -3168,6 +3343,10 @@ public class GroupCaptureParser extends RegexFileParser {
 #### 문자열 치환 예제
 
 ```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 public class StringReplacementParser extends RegexFileParser {
     
     public StringReplacementParser(String fileName) {
@@ -3217,7 +3396,10 @@ public class StringReplacementParser extends RegexFileParser {
 #### 테스트
 
 ```java
-public class RegexParsingMain {
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class RegexParsingTest {
     public static void main(String[] args) {
         // 테스트 파일 생성
         createTestFile();
@@ -3226,7 +3408,7 @@ public class RegexParsingMain {
         PatternParser parser = new PatternParser("test_data.txt");
         
         System.out.println("=== 파일 내용 ===");
-        parser.printLines();
+        parser.getAllContent();
         
         System.out.println("\n=== 이메일 추출 ===");
         parser.extractEmails().forEach(System.out::println);
@@ -3289,60 +3471,6 @@ public class RegexParsingMain {
         } catch (IOException e) {
             System.err.println("테스트 파일 생성 오류: " + e.getMessage());
         }
-    }
-}
-```
-
-### 
-
-```java
-public class PracticeProblems {
-    
-    // 주민등록번호 추출 (앞자리만 표시)
-    public static List<String> extractMaskedSSN(String fileName) {
-        List<String> results = new ArrayList<>();
-        Pattern pattern = Pattern.compile("(\\d{6})-\\d{7}");
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                while (matcher.find()) {
-                    results.add(matcher.group(1) + "-*******");
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("파일 읽기 오류: " + e.getMessage());
-        }
-        return results;
-    }
-    
-    // 카드번호 추출 (마스킹 처리)
-    public static List<String> extractMaskedCardNumber(String fileName) {
-        List<String> results = new ArrayList<>();
-        Pattern pattern = Pattern.compile("(\\d{4})-(\\d{4})-(\\d{4})-(\\d{4})");
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String masked = pattern.matcher(line).replaceAll("$1-****-****-$4");
-                if (!masked.equals(line)) {
-                    results.add(masked);
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("파일 읽기 오류: " + e.getMessage());
-        }
-        return results;
-    }
-    
-    public static void main(String[] args) {
-        // 연습 문제 테스트
-        System.out.println("=== 주민등록번호 마스킹 ===");
-        extractMaskedSSN("practice_data.txt").forEach(System.out::println);
-        
-        System.out.println("\n=== 카드번호 마스킹 ===");
-        extractMaskedCardNumber("practice_data.txt").forEach(System.out::println);
     }
 }
 ```
