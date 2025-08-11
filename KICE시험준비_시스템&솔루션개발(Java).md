@@ -421,6 +421,7 @@ public class GsonFromJsonExample {
 ```
 
 
+
 #### 주요 기능 요약표
 
 | 기능               | 메서드 예시                          | 설명                      |
@@ -431,6 +432,8 @@ public class GsonFromJsonExample {
 | 컬렉션/배열 지원   | `fromJson(json, TypeToken)`          | List, Set 등 제네릭 지원  |
 | 트리 모델 파싱     | `JsonParser.parseString(json)`       | JsonObject/JsonArray 사용 |
 | Pretty Printing    | `GsonBuilder().setPrettyPrinting()`  | 보기 좋은 JSON 출력       |
+
+
 
 ##### JsonObject/JsonArray 직접 다루기
 
@@ -522,8 +525,6 @@ public class JsonToObjectExample {
     }
 }
 ```
-
-
 
 #####  컬렉션, 제네릭 타입 파싱
 
