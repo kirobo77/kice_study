@@ -41,7 +41,16 @@
 > 3. **자동 활성화(Auto Activation) 설정**
 >    - 우측에서 **Enable auto activation** 체크박스를 선택.
 
-
+#### 실습환경 구성
+> [!TIP]
+>
+> JDK 설치
+>
+> https://adoptium.net/temurin/releases/?version=17
+>
+> Eclise 설치
+>
+> https://www.eclipse.org/downloads/
 
 ### 시험 문항 프로젝트 구조
 
