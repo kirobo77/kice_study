@@ -2886,8 +2886,6 @@ public class CompletableFutureCombine {
 
 ```java
 import java.util.concurrent.CompletableFuture;
-import java.util.Arrays;
-import java.util.List;
 
 public class CompletableFutureAllOf {
     public static void main(String[] args) throws Exception {
@@ -2926,8 +2924,11 @@ public class CompletableFutureException {
 #### 예제: CompletableFuture 여러 Agent 작업 병렬 처리
 
 ```java
-import java.util.concurrent.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 
 class AgentWorker implements Callable<Integer> {
     private final String agentName;
