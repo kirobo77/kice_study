@@ -10,7 +10,7 @@ public class RegexParsingTest {
         PatternParser parser = new PatternParser("test_data.txt");
         
         System.out.println("=== 파일 내용 ===");
-        parser.getAllContent();
+        System.out.println(parser.getAllContent());
         
         System.out.println("\n=== 이메일 추출 ===");
         parser.extractEmails().forEach(System.out::println);

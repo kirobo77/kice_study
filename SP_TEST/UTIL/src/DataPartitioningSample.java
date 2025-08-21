@@ -78,7 +78,7 @@ public class DataPartitioningSample {
         
         // 테스트 데이터 생성
         List<String> data = Arrays.asList(
-            "user1", "user2", "user3", "user4", "user5",
+            "user1", "user2", "user3", "user4", "user5", "user6","user7","user8","user9","user10","user11","user12",
             "order1", "order2", "order3", "order4", "order5",
             "product1", "product2", "product3", "product4", "product5"
         );

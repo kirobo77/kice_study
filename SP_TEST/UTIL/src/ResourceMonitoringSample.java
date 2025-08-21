@@ -152,9 +152,9 @@ public class ResourceMonitoringSample {
         ResourceMonitor monitor = new ResourceMonitor();
         
         // 메트릭 추가 (메트릭명, 윈도우 크기, 임계값)
-        monitor.addMetric("cpu_usage", 5, 80.0);
-        monitor.addMetric("memory_usage", 5, 85.0);
-        monitor.addMetric("response_time", 5, 500.0);
+        monitor.addMetric("cpu_usage", 3, 80.0);
+        monitor.addMetric("memory_usage", 3, 85.0);
+        monitor.addMetric("response_time", 3, 500.0);
         
         // 수동으로 몇 개의 메트릭 값 추가
         System.out.println("--- Manual Metric Updates ---");
