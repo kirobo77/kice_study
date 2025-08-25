@@ -1,7 +1,11 @@
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
-import javax.servlet.http.*;
-import javax.servlet.*;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 
 public class JettyEmbeddedExample {
     public static void main(String[] args) throws Exception {
@@ -36,7 +40,7 @@ public class JettyEmbeddedExample {
 	        System.out.println("Context Path: " + contextPath);
 	        System.out.println("Servlet Path: " + servletPath);
 	        System.out.println("Query String: " + queryString);
-	        
+
             resp.setContentType("text/plain; charset=utf-8");
             resp.getWriter().write("[GET]Hello, Jetty Embedded!");
 
@@ -55,7 +59,16 @@ public class JettyEmbeddedExample {
 	        System.out.println("Context Path: " + contextPath);
 	        System.out.println("Servlet Path: " + servletPath);
 	        System.out.println("Query String: " + queryString);
-	        
+
+            StringBuilder sb = new StringBuilder();
+            BufferedReader reader = req.getReader();
+            String line = "";
+            while((line = reader.readLine())!=null){
+                sb.append(line);
+            }
+
+            System.out.println("Body String: " + sb.toString());
+
             resp.setContentType("application/json; charset=utf-8");
             resp.getWriter().write("[POST]Hello, Jetty Embedded!");
         }        
